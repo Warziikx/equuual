@@ -1,0 +1,89 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(href='/images/web_app/favicon.ico' rel='shortcut icon')
+        link(href='/stylesheets/output.css' type='text/css' rel='stylesheet')
+        link(href='/stylesheets/styles.css' type='text/css' rel='stylesheet')
+        link(href='https://fonts.googleapis.com/css2?family=Roboto&display=swap', rel='stylesheet')
+        link(href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css', rel='stylesheet')
+        script(src="/javascripts/script.js")
+        title Equuual
+        block include
+    body
+        -function prettyDate(dateString){
+            -var currentDate = new Date();
+            -var date = new Date(dateString);
+            -var d = date.getDate() < 10 ? "0" + date.getDate(): date.getDate();
+            -var month = date.getMonth() + 1;
+            -var m = month < 10 ? "0" + month : month;
+            -var y = date.getFullYear() == currentDate.getFullYear() ? "" : "/" +  date.getFullYear();
+            -return d+'/'+m+y;
+        -}
+        -function prettyDateWithYear(dateString){
+            -var date = new Date(dateString);
+            -var d = date.getDate() < 10 ? "0" + date.getDate(): date.getDate();
+            -var month = date.getMonth() + 1;
+            -var m = month < 10 ? "0" + month : month;
+            -var y =  date.getFullYear();
+            -return d+'/'+m+'/'+y;
+        -}
+        .flex.flex-col.h-screen.my-main-container
+            header.w-full.relative.border-b
+                .p-4.text-gray-900.font-medium.capitalize
+                    a.px-2.mr-2(href='/web/dashboard')
+                        img.w-28.h-8.-mt-1.inline.mx-auto.hidden(src='/images/web_app/logo.png' alt='logo_equuual' class="lg:inline")
+                        img.w-28.h-8.-mt-1.inline.mx-auto(src='/images/web_app/logo-mobile.png' alt='logo_equuual' class="lg:hidden")
+                    if request.originalUrl.indexOf('group') !== -1
+                        a.p-1.rounded-lg.mx-4.bg-gray-400.transition.duration-200.ease-in-out.transform(href='/web/group')
+                            i.w-8.fas.fa-stream.p-2.rounded-full
+                            span.mx-2(class='hidden sm:inline') Groupes
+                    else
+                        a.p-1.rounded-lg.mx-4.transition.duration-200.ease-in-out.transform(class='hover:bg-gray-400',href='/web/group')
+                            i.w-8.fas.fa-stream.p-2.rounded-full
+                            span.mx-2(class='hidden sm:inline') Groupes
+                    if request.originalUrl.indexOf('friend') !== -1
+                        a.p-1.rounded-lg.mx-4.bg-gray-400.transition.duration-200.ease-in-out.transform(href='/web/friend')
+                            i.w-8.fas.fa-users.p-2.rounded-full
+                            span.mx-2(class='hidden sm:inline') Amis
+                    else
+                        a.p-1.rounded-lg.mx-4.transition.duration-200.ease-in-out.transform(class='hover:bg-gray-400',href='/web/friend')
+                            i.w-8.fas.fa-users.p-2.rounded-full
+                            span.mx-2(class='hidden sm:inline') Amis
+                    a.relative.float-right.cursor-pointer.rounded-lg.bg-sandy-brown-400.transition.duration-200.ease-in-out(href='/web/auth/logout' class='hidden sm:inline hover:bg-sandy-brown-600 hover:text-gray-200')
+                        i.w-8.fas.fa-sign-out-alt.p-2
+                    a.flex.flex-row.items-center.w-auto.mr-4.relative.float-right.cursor-pointer.transition.duration-200.ease-in-out.rounded-lg(class='hover:bg-gray-400',href='/web/account')
+                        if session.user
+                            span.mx-2(class='hidden sm:inline') Bienvenue #{session.user.displayName}
+                        img.w-8.rounded-full(src=`${session.user.image.url}`)
+            main.flex-1.overflow-y-auto.bg-gray-100
+                block content
+            block footer
+        script.
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:2182215,hjsv:6};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+            function toggleHidden(id){
+                let element = document.getElementById(id);
+                element.classList.toggle("hidden")
+            }
+            DOMTokenList.prototype.addMany = function(classes) {
+                var array = classes.split(' ');
+                for (var i = 0, length = array.length; i < length; i++) {
+                this.add(array[i]);
+                }
+            }
+
+            DOMTokenList.prototype.removeMany = function(classes) {
+                var array = classes.split(' ');
+                for (var i = 0, length = array.length; i < length; i++) {
+                this.remove(array[i]);
+                }
+            }
+

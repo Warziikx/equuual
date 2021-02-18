@@ -1,0 +1,12 @@
+extends ../../layout/base
+
+block include
+    script(src='https://cdn.jsdelivr.net/npm/apexcharts')
+block content
+  .container.mx-auto(class="px-2 xl:px-0")
+      .py-6.text-gray-900.transition.duration-500.ease-in-out(class='dark:text-gray-500')
+        .w-full.mx-auto.mt-8.rounded-md.bg-white.shadow.p-8
+          #categoryRepartitionChart
+  script.
+    var repartitionChartData = !{JSON.stringify(data)};
+  script(src="/javascripts/stats.js")

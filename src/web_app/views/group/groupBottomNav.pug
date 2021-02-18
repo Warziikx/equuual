@@ -1,0 +1,22 @@
+footer.w-full.pin-b.bg-gray-100(class='xl:hidden')
+    .flex.justify-center.-mb-6
+        a(href=`/web/group/${group.id}/spend/new`) 
+            .bg-white.shadow.h-12.w-12.rounded-full.text-white.flex.items-center.justify-center.transition.duration-200.ease-in-out(class="hover:shadow-lg")
+                i.text-2xl.fas.fa-plus.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent
+    ul.flex.justify-between.flex-row.items-center.bg-white.shadow.mb-4.mx-2.rounded-xl.px-8.text-gray-700(class="sm:mx-8")
+        li#spendLi.py-1
+            a(href='#',onclick='showSpend()') 
+                #spendA.h-12.w-12.bg-gray-200.rounded-full.text-eminence.flex.items-center.justify-center.transition.duration-200.ease-in-out
+                    i.text-xl.fas.fa-euro-sign
+        li#debtLi.ml-4
+            a(href='#',onclick='showDebt()') 
+                #debtA.h-12.w-12.rounded-full.flex.items-center.justify-center.transition.duration-200.ease-in-out(class="hover:shadow-lg")
+                    i.text-xl.fas.fa-hand-holding-usd        
+        li#memberLi.mr-4
+            a(href='#',onclick='showMember()') 
+                #memberA.h-12.w-12.rounded-full.flex.items-center.justify-center.transition.duration-200.ease-in-out(class="hover:shadow-lg")
+                    i.text-xl.fas.fa-user-friends
+        li#settingLi
+            a(href='#',onclick='showSetting()') 
+                #settingA.h-12.w-12.rounded-full.flex.items-center.justify-center.transition.duration-200.ease-in-out(class="hover:shadow-lg")
+                    i.text-xl.fas.fa-cog

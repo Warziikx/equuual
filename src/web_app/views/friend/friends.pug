@@ -1,0 +1,79 @@
+extends ../layout/base
+
+block include
+  script(src='https://code.jquery.com/jquery-3.5.1.min.js' integrity='sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=' crossorigin='anonymous')
+  script(src='https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js')
+  script(src="/javascripts/datatables.js")
+
+  link(href='https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css' rel='stylesheet')
+  link(href='/stylesheets/datatables_tailwind.css' , rel='stylesheet')
+block content
+  -function prettyDate(dateString){
+      -var date = new Date(dateString);
+      -var d = date.getDate() < 10 ? "0" + date.getDate(): date.getDate();
+      -var month = date.getMonth() + 1;
+      -var m = month < 10 ? "0" + month : month;
+      -var y = date.getFullYear();
+      -return d+'/'+m+'/'+y;
+  -}
+  .container.mx-auto(class="px-4 xl:px-0")
+    .py-6.text-gray-900.transition.duration-500.ease-in-out(class='dark:text-gray-500')
+      form#friendForm.relative(action="/web/friend",method="post")
+        input#name.w-full.px-8.py-4.leading-5.rounded-full.appearance-none.bg-white-rock.placeholder-gray-700(class='focus:outline-none' type='text' placeholder='Ajouter un ami' name="login" required autocomplete="off")
+        .absolute.inset-y-0.right-0.flex.items-center.px-2.text-gray-700
+          button.rounded-full.px-8.py-2.bg-white.shadow.uppercase.font-semibold.tracking-wide.transition.duration-200.ease-in-out(class="hover:shadow-lg focus:outline-none focus:nm-flat-gray-200" type="submit" form='friendForm') 
+            span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Ajouter
+      .w-full.mx-auto.mt-8.space-y-2
+        include ../layout/flash
+        if customer.friends !== undefined || customer.userFriends !== undefined
+          each friend,index in customer.userFriends
+            if !friend.friend.accepted
+              .px-5.py-4.rounded-md.bg-white.shadow.flex.flex-row.justify-between
+                div.flex.flex-row.items-center
+                  img.bg-white-rock.w-16.fas.p-1.fa-check.bg-gray-200.rounded-full(src=`${friend.image.url}`)
+                  .ml-8
+                    h2.text-xl @#{friend.login}
+                    .text-xs.inline-flex.items-center.font-bold.leading-sm.uppercase.px-3.py-1.bg-orange-200.text-orange-700.rounded-full
+                      i.fas.fa-pause.mr-2
+                      | Vous a demandé en amis
+                div.flex.flex-row.items-center.space-x-4
+                  button.relative.cursor-pointer.transition.duration-200.ease-in-out.shadow.rounded-full.bg-gray-100(class='hover:shadow-lg',onclick=`validateFriend(${friend.id})`)
+                    i.fas.fa-check.p-2
+                  button.relative.cursor-pointer.transition.duration-200.ease-in-out.shadow.rounded-full.bg-gray-100(class='hover:shadow-lg',onclick=`deleteFriend(${friend.id})`)
+                    i.w-8.fas.fa-times.p-2
+          each friend,index in customer.friends
+            .px-5.py-4.rounded-md.bg-white.shadow.flex.flex-row.items-center
+              img.bg-white-rock.w-16.fas.p-1.fa-check.bg-gray-200.rounded-full(src=`${friend.image.url}`)
+              if friend.friend.accepted
+                .flex.flex-col.ml-8
+                  h2.text-xl #{friend.displayName}
+                  p.text-sm @#{friend.login}
+              else
+                .ml-8
+                  h2.text-xl @#{friend.login}
+                  .text-xs.inline-flex.items-center.font-bold.leading-sm.uppercase.px-3.py-1.bg-orange-200.text-orange-700.rounded-full
+                    i.fas.fa-pause.mr-2
+                    | En attente
+        else
+          .flex.justify-center
+            button.px-4.py-2.bg-blue-200.text-gray-900.rounded.cursor-pointer.transition.duration-200.ease-in-out(class='hover:text-gray-700',onclick="newFriend()")
+              i.w-8.fas.fa-plus
+              span Ajouter des amis
+    include ./friendFormModal.pug
+    script.
+      function newFriend(){
+        toggleModal()
+      }
+      function deleteFriend(id){
+        var answer = window.confirm("Êtes vous sur de vouloir supprimer cet ami");
+        if (answer) {
+          window.location.href = `/web/friend/${id}/delete`;
+        }
+        else {
+
+        }
+      }
+      function validateFriend(id){
+        window.location.href = `/web/friend/${id}/validate`;
+      }
+

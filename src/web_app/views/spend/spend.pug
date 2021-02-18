@@ -1,0 +1,48 @@
+extends ../layout/base
+
+block include
+
+block content
+    .container.mx-auto.mt-8
+        .grid.grid-cols-3.hidden(class="lg:grid")
+            div
+            .space-y-8.rounded-md.bg-white.shadow.p-4
+                section.flex.flex-col.items-center.space-y-4
+                    h1.text-4xl.text-center #{spend.name}
+                    h3.text-2xl.text-night-shadz #{spend.amount.toFixed(2)} €
+                    .flex.flex-row.justify-between.w-full
+                        p.text-sm.text-gray-600 Payé par 
+                            span.text-gray-900 #{spend.payer.displayName}
+                        p.text-sm.text-right.text-gray-600 #{prettyDate(spend.date)}
+                section.flex.flex-col.space-y-4.px-4
+                    h3.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm Répartition
+                    each divide in spend.percent_divide
+                        .flex.flex-row.justify-between.w-full
+                            h1 #{divide.displayName}
+                            p #{(spend.amount * divide.spend_customer.nb_part / totalNbParts).toFixed(2)} €
+                section.flex.justify-start.pt-2.space-x-2
+                    a.text-white.bg-eminence-500.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg' href=`/web/group/${group.id}/spend/${spend.id}/edit`) 
+                        span.font-bold Modifier
+                    a.text-white.bg-sandy-brown.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg' href=`${request.headers.referer}`) 
+                        | Retour
+            div
+        .space-y-8.mx-8.rounded-md.bg-white.shadow.p-4(class="lg:hidden")
+            section.flex.flex-col.items-center.space-y-4
+                h1.text-4xl.text-center #{spend.name}
+                h3.text-2xl.text-night-shadz #{spend.amount.toFixed(2)} €
+                .flex.flex-row.justify-between.w-full
+                    p.text-sm.text-gray-600 Payé par 
+                        span.text-gray-900 #{spend.payer.displayName}
+                    p.text-sm.text-right.text-gray-600 #{prettyDate(spend.date)}
+            section.flex.flex-col.space-y-4.px-4
+                h3.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm Répartition
+                each divide in spend.percent_divide
+                    .flex.flex-row.justify-between.w-full
+                        h1 #{divide.displayName}
+                        p #{(spend.amount * divide.spend_customer.nb_part / totalNbParts).toFixed(2)} €
+            section.flex.justify-start.pt-2.space-x-2
+                a.text-white.bg-eminence-500.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg' href=`/web/group/${group.id}/spend/${spend.id}/edit`) 
+                    span.font-bold Modifier
+                a.text-white.bg-sandy-brown.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg' href=`${request.headers.referer}`) 
+                    | Retour
+block footer

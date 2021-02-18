@@ -1,0 +1,75 @@
+// Modal
+.modal-options.opacity-0.pointer-events-none.fixed.w-full.h-full.top-0.left-0.flex.items-center.justify-center.transition.duration-200.ease-in-out
+  .modal-overlay-option.absolute.w-full.h-full.bg-gray-900.opacity-75
+  .modal-container.bg-gray-200.mx-auto.rounded.shadow-lg.z-50.overflow-y-auto(class='w-11/12 md:max-w-md')
+    .modal-close-option.absolute.top-0.right-0.cursor-pointer.flex.flex-col.items-center.mt-4.mr-4.text-white.text-sm.z-50
+      svg.fill-current.text-white(xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18')
+        path(d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z')
+      span.text-sm (Esc)
+    // Add margin if you want to see some of the overlay behind the modal
+    .modal-content.py-4.text-left.px-6
+      // Title
+      .flex.justify-between.items-center.pb-3
+        p#modalTitle.text-2xl.uppercase.font-semibold.tracking-wide Modifier les options
+        .modal-close.cursor-pointer.z-50
+          svg.fill-current.text-black(xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18')
+            path(d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z')
+      // Body
+      form#groupOptionForm.px-8.py-8.rounded(action=`/web/group/${group.id}`,method="post")
+        div
+          each option,index in options
+            .flex.items-center.justify-between.pb-2
+              label.switch
+                input(type='checkbox' onclick="changeCheckbox(this)" id=`option_${option.id}` key=`${option.id}` checked=`${option.isActive ? "checked" : ""}`)
+                span.slider.round
+              input(type="hidden" name="optionActive" value=`${option.isActive ? "true" : "false"}` id=`hidden_option_${option.id}`)
+              input(type="hidden" name="optionId" value=`${option.id}`)
+              span.text-sm.capitalize
+                | #{option.name}
+      //Action
+      .flex.justify-start.pt-2.space-x-2
+        button.text-white.bg-eminence-500.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg',type="submit",form='groupOptionForm') 
+          span.font-bold Modifier
+        button.modal-close-option.text-white.bg-sandy-brown.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg') Fermer
+script.
+
+  const overlayOption = document.querySelector('.modal-overlay-option')
+  overlayOption.addEventListener('click', toggleOptionsModal)
+    
+  var closemodalOption = document.querySelectorAll('.modal-close-option')
+  for (var i = 0; i < closemodalOption.length; i++) {
+    closemodalOption[i].addEventListener('click', toggleOptionsModal)
+  }
+  document.onkeydown = function(evt) {
+    evt = evt || window.event
+    var isEscape = false
+    if ("key" in evt) {
+      isEscape = (evt.key === "Escape" || evt.key === "Esc")
+    } else {
+      isEscape = (evt.keyCode === 27)
+    }
+    if (isEscape && document.body.classList.contains('modal-active')) {
+      toggleOptionsModal()
+    }
+  };
+  function toggleOptionsModal () {
+    const body = document.querySelector('body')
+    const modalOptions = document.querySelector('.modal-options')
+    modalOptions.classList.toggle('opacity-0')
+    modalOptions.classList.toggle('pointer-events-none')
+    body.classList.toggle('modal-active')
+  }
+
+  function changeCheckbox(event) {
+    let key = event.getAttribute("key")
+    let option = document.getElementById(`option_${key}`)
+    let hiddenOption = document.getElementById(`hidden_option_${key}`)
+    hiddenOption.value = hiddenOption.value == "false" ? "true" : "false"
+    if(hiddenOption.value == "true") {
+        option.classList.removeMany("nm-inset-gray-200 justify-start")
+        option.classList.addMany("nm-inset-eminence justify-end")
+    } else {
+        option.classList.removeMany("nm-inset-eminence justify-end")
+        option.classList.addMany("nm-inset-gray-200 justify-start")
+    }
+  }

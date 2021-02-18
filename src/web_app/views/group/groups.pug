@@ -1,0 +1,58 @@
+extends ../layout/base
+
+block include
+block content
+  -function prettyDate(dateString){
+    -var date = new Date(dateString);
+    -var d = date.getDate() < 10 ? "0" + date.getDate(): date.getDate();
+    -var month = date.getMonth() + 1;
+    -var m = month < 10 ? "0" + month : month;
+    -var y = date.getFullYear();
+    -return d+'/'+m+'/'+y;
+  -}
+  .container.mx-auto(class="px-2 xl:px-0")
+    .py-6.text-gray-900.transition.duration-500.ease-in-out(class='dark:text-gray-500')
+      .w-full.mx-auto.mt-8
+        include ../layout/flash
+        //Sur pc
+        .grid.grid-cols-3.gap-4.hidden(class="lg:grid")
+          each group,index in groups
+            a.p-2.rounded-md.bg-white.shadow.transition.duration-200.ease-in-out.flex.flex-col.justify-center.items-center(class='hover:shadow-lg',href=`/web/group/${group.id}`)
+              h1.text-2xl #{group.name}
+              p #{prettyDate(group.updatedAt)}
+          button.p-2.bg-white.shadow.rounded-md.transition.duration-200.ease-in-out.justify-center.items-center.flex(class='hover:shadow-lg' onclick="newGroup()")
+            .text-xl.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent.flex.flex-row.justify-center.items-center
+              i.w-12.fas.fa-plus.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent
+              h1 Créer un nouveau groupe
+        //Sur mobile
+        .space-y-2(class="lg:hidden")
+          button.w-full.py-4.rounded-md.bg-white.shadow.justify-between.items-center.transition.duration-200.ease-in-out(class='hover:shadow-lg' onclick="newGroup()")
+            .text-xl.flex.flex-row.justify-center.items-center.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent
+              i.w-12.fas.fa-plus
+              h1.text-xl.uppercase.font-semibold.tracking-wide Créer un nouveau groupe
+          each group,index in groups
+            a.px-5.py-4.bg-white.shadow.flex.flex-row.justify-between.items-center.duration-200.ease-in-out(class='hover:shadow-lg',href=`/web/group/${group.id}`)
+              h1.text-2xl #{group.name}
+              p #{prettyDate(group.updatedAt)}
+    include ./groupFormModal.pug
+    script.
+      function deleteGroup(id){
+        var answer = window.confirm("Êtes vous sur de vouloir supprimer le groupe");
+        if (answer) {
+          window.location.href = `/web/group/${id}/delete`;
+        }
+        else {
+
+        } 
+      };
+      function editGroup(id, name){
+        toggleModal()
+        fillData(name)
+        setEdit(id)
+      }
+      function newGroup(){
+        toggleModal()
+        fillData()
+        setNew()
+      }
+

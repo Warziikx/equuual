@@ -1,0 +1,236 @@
+extends ../layout/base
+block include
+    script(src='https://cdn.jsdelivr.net/npm/pikaday/pikaday.js')
+    link(rel='stylesheet' type='text/css' href='https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css')
+block content
+    .container.mx-auto.p-8
+        - function comparer(otherArray){
+        -    return function(current){
+        -        return otherArray.filter(function(other){
+        -           return other.id == current.id
+        -        }).length == 0;
+        -    }
+        - };
+        - function filterNotParticipant(participants , groupMembers){
+        -    var notInParticipant = groupMembers.filter(comparer(participants));
+        -    return notInParticipant;
+        -}
+        - var formAction = `/web/group/${group.id}/spend`
+        - var title = "Ajout d'une dépense dans"
+        - if (spend != null){
+        - title = "Modifier une dépense dans "
+        - formAction = `/web/group/${group.id}/spend/${spend.id}`
+        - }
+        form#groupForm(action=`${formAction}`,method="post")
+            .grid.grid-cols-12.gap-8
+                .col-span-12
+                    .flex.flex-row.items-center.justify-between.space-x-8
+                        a.w-8.h-8.rounded-full.bg-gray-200.shadow.flex.items-center.text-center.transition.duration-200.ease-in-out(class="hover:shadow-lg" href=`${request.headers.referer}`)
+                            i.w-8.text-xl.fas.fa-arrow-left
+                        h2.text-2xl.font-medium #{title} 
+                            span.text-night-shadz #{group.name}
+                .col-span-12.space-y-4(class="lg:col-span-8")
+                    div
+                        label.block.mb-2.text-sm.font-bold.text-gray-700(for='name')
+                            | Titre
+                        if spend == null
+                            input#name.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', type='text',name="name" required autocomplete="off")
+                        else
+                            input#name.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', type='text' name="name" value=`${spend.name}` required autocomplete="off")
+                        p#name-msg.text-xs.italic.text-red-500.hidden Champ requis
+                    div
+                        label.block.mb-2.text-sm.font-bold.text-gray-700(for='name')
+                            | Montant
+                        if spend == null
+                            input#amount.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', type='number' name="amount",step=".01" onkeyup="updateAmount()" required autocomplete="off")
+                        else
+                            input#amount.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', type='number' name="amount",step=".01" onkeyup="updateAmount()" value=`${spend.amount.toFixed(2)}` required autocomplete="off")
+                        p#amount-msg.text-xs.italic.text-red-500.hidden Champ requis
+                    div
+                        label.block.mb-2.text-sm.font-bold.text-gray-700(for='name')
+                            | Date
+                        if spend == null 
+                            input#datepicker.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', autocomplete="off",type='text',name="date", pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}")
+                        else
+                            input#datepicker.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', autocomplete="off",type='text', name="date", pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}" value=`${prettyDateWithYear(spend.date)}`)
+                        p#datepicker-msg.text-xs.italic.text-red-500.hidden Champ requis
+                    div
+                        label.block.mb-2.text-sm.font-bold.text-gray-700(for='name')
+                            | Categorie
+                        .flex.flex-row.space-x-4
+                            img.w-8.h-8#category-img
+                            select#category.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200' name="category" onchange='categoryChange();')
+                                if spend == null
+                                    each category,index in categories
+                                        if category.is_default
+                                            option(data-img=`${category.illustration_path}` value=`${category.id}` selected) #{category.name}
+                                        else
+                                            option(data-img=`${category.illustration_path}` value=`${category.id}`) #{category.name}
+                                else
+                                    each category,index in categories
+                                        if category.id === spend.category.id
+                                            option(data-img=`${category.illustration_path}` value=`${category.id}` selected) #{category.name}
+                                        else
+                                            option(data-img=`${category.illustration_path}` value=`${category.id}`) #{category.name}
+                    div
+                        label.block.mb-2.text-sm.font-bold.text-gray-700(for='name')
+                            | Payé par
+                        .relative
+                            select#payer.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200' name="payer" )
+                                if spend == null
+                                    if group.creator.id === session.user.id
+                                        option(selected value=`${group.creator.id}`) #{group.creator.displayName}
+                                    else
+                                        option(value=`${group.creator.id}`) #{group.creator.displayName}
+                                    each member,index in group.member
+                                        if member.id === session.user.id
+                                            option(value=`${member.id}` selected) #{member.displayName}
+                                        else
+                                            option(value=`${member.id}`) #{member.displayName}
+                                else
+                                    if group.creator.id === spend.payer.id
+                                        option(selected value=`${group.creator.id}`) #{group.creator.displayName}
+                                    else
+                                        option(value=`${group.creator.id}`) #{group.creator.displayName}
+                                    each member,index in group.member
+                                        if member.id === spend.payer.id
+                                            option(value=`${member.id}` selected) #{member.displayName}
+                                        else
+                                            option(value=`${member.id}`) #{member.displayName}
+                        p#payer-msg.text-xs.italic.text-red-500.hidden Champ requis
+                .col-span-12.space-y-4(class="lg:col-span-4")
+                    h3.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm Répartition
+                    if spend == null
+                        .mb-6.flex.items-center.justify-between
+                            label.switch
+                                input(type='checkbox' onclick="changeCheckbox(this)" id=`participe_${group.creator.id}` key=`${group.creator.id}` checked)
+                                span.slider.round
+                            input(type="hidden" name="participe" value="true" id=`hidden_participe_${group.creator.id}`)
+                            input(type="hidden" name="participantId" value=`${group.creator.id}`)
+                            span.text-sm.align-middle
+                                | #{group.creator.displayName}
+                            .flex.flex-row.space-x-2.justify-center.items-center
+                                input.w-16.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200' type="number" name="part" id=`part_${group.creator.id}` value=1 onkeyup="updateAmount()")
+                                span.align-middle(id=`cost_display_${group.creator.id}`) 0.00 €
+                        each member,index in group.member
+                            .mb-6.flex.items-center.justify-between
+                                label.switch
+                                    input(type='checkbox' onclick="changeCheckbox(this)" id=`participe_${member.id}` key=`${member.id}` checked)
+                                    span.slider.round
+                                //- button.h-6.w-12.nm-inset-eminence.rounded-full.flex.justify-end(type='button' id=`participe_${member.id}` key=`${member.id}` onclick="changeCheckbox(this)" class='focus:outline-none focus:shadow-outline')
+                                //-     .h-6.w-6.bg-gray-200.transform.scale-110.rounded-full.shadow
+                                input(type="hidden" name="participe" value="true" id=`hidden_participe_${member.id}`)
+                                input(type="hidden" name="participantId" value=`${member.id}`)
+                                span.text-sm.align-middle
+                                    | #{member.displayName}
+                                .flex.flex-row.space-x-2.justify-center.items-center
+                                    input.w-16.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200' type="number" name="part" id=`part_${member.id}` value=1  onkeyup="updateAmount()")
+                                    span.align-middle(id=`cost_display_${member.id}`) 0.00 €
+                    else
+                        - var leftGroupMembers = filterNotParticipant(spend.percent_divide, group.member);
+                        each participant,index in spend.percent_divide
+                            .mb-6.flex.items-center.justify-between
+                                label.switch
+                                    input(type='checkbox' onclick="changeCheckbox(this)" id=`participe_${participant.id}` key=`${participant.id}` checked)
+                                    span.slider.round
+                                //- button.h-6.w-12.nm-inset-eminence.rounded-full.flex.justify-end(type="button" id=`participe_${participant.id}` key=`${participant.id}` class='focus:outline-none focus:shadow-outline' onclick="changeCheckbox(this)")
+                                //-     .h-6.w-6.bg-gray-200.transform.scale-110.rounded-full
+                                input(type="hidden" name="participe" value="true" id=`hidden_participe_${participant.id}`)
+                                input(type="hidden" name="participantId" value=`${participant.id}`)
+                                span.text-sm.align-middle
+                                    | #{participant.displayName}
+                                .flex.flex-row.space-x-2.justify-center.items-center
+                                    input.w-16.px-2.py-1.leading-5.rounded-full.appearance-none.nm-inset-gray-200.w-8(type="number" name="part" id=`part_${participant.id}` value=`${participant.spend_customer.nb_part}` onkeyup="updateAmount()")
+                                    span.align-middle(id=`cost_display_${participant.id}`) 0.00 €
+                        each participant,index in leftGroupMembers
+                            .mb-6.flex.items-center.justify-between
+                                label.switch
+                                    input(type='checkbox' onclick="changeCheckbox(this)" id=`participe_${participant.id}` key=`${participant.id}`)
+                                    span.slider.round
+                                //- button.h-6.w-12.nm-inset-gray-200.rounded-full.flex.justify-start(type="button" id=`participe_${participant.id}` key=`${participant.id}` class='focus:outline-none focus:shadow-outline' onclick="changeCheckbox(this)")
+                                //-     .h-6.w-6.bg-gray-200.transform.scale-110.rounded-full
+                                input(type="hidden" name="participe" value="false" id=`hidden_participe_${participant.id}`)
+                                input(type="hidden" name="participantId" value=`${participant.id}`)
+                                span.text-sm.align-middle
+                                    | #{participant.displayName}
+                                .flex.flex-row.space-x-2.justify-center.items-center
+                                    input.w-16.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200' type="number" name="part" id=`part_${participant.id}` value=1 onkeyup="updateAmount()")
+                                    span.align-middle(id=`cost_display_${participant.id}`) 0.00 €
+                .col-span-12
+                    .flex.justify-end.pt-2.space-x-2
+                        button#submitButton.w-full.text-white.bg-eminence-500.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg' type="submit",form='groupForm') 
+                            if spend == null
+                                span Ajouter
+                            else
+                                span Modifier
+                        if spend != null
+                            a.w-full.text-white.bg-sandy-brown.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg' href=`/web/group/${group.id}/spend/${spend.id}/delete`) Supprimer
+    script.
+        let member = !{JSON.stringify(group.member)};
+        let creator = !{JSON.stringify(group.creator)};
+        let allMember = [...member, ...[creator]];
+        categoryChange()
+
+        var picker = new Pikaday(
+            { 
+                field: document.getElementById('datepicker'),
+                firstDay : 1,
+                format: 'DD/MM/YYYY',
+                    toString(date, format) {
+                    // you should do formatting based on the passed format,
+                    // but we will just return 'D/M/YYYY' for simplicity
+                    const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+                    const month = date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                },
+                i18n: 
+                    {
+                        previousMonth : 'Mois précédend',
+                        nextMonth     : 'Mois suivant',
+                        months        : ['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'],
+                        weekdays      : ['Dimanche ','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+                        weekdaysShort : ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam']
+                    } 
+            }
+        );
+        picker.setDate(new Date())
+
+        function changeCheckbox(event) {
+            let key = event.getAttribute("key")
+            let participe = document.getElementById(`participe_${key}`)
+            let hiddenParticipe = document.getElementById(`hidden_participe_${key}`)
+            hiddenParticipe.value = hiddenParticipe.value == "false" ? "true" : "false"
+            updateAmount();
+        }
+        function categoryChange() {
+            select = document.getElementById("category");
+            categoryImg = document.getElementById("category-img");
+            categoryImg.src = select.options[select.selectedIndex].dataset.img;
+        }
+        
+        function updateAmount(){
+            let montant = document.getElementById("amount").value
+            let participantArray = allMember.filter(member => {
+                let checkbox = document.getElementById(`hidden_participe_${member.id}`)
+                if(checkbox.value == "true"){
+                    return member;
+                }else{
+                    let costDisplay = document.getElementById(`cost_display_${member.id}`);
+                    costDisplay.innerHTML = `0.00 €`;
+                }
+            })
+            let nbTotalPart = 0 
+            participantArray.map(member => {
+                nbTotalPart += parseInt(document.getElementById(`part_${member.id}`).value)
+            })
+
+            participantArray.map(member => {
+                let costDisplay = document.getElementById(`cost_display_${member.id}`);
+                let nbPart = parseInt(document.getElementById(`part_${member.id}`).value)
+                costDisplay.innerHTML = `${(montant * (nbPart / nbTotalPart)).toFixed(2)} €`;
+            })
+        }
+    if spend != null
+        script.
+            updateAmount();

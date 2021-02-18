@@ -1,0 +1,74 @@
+extends ../layout/base_without_menu
+
+block content
+	// Container
+	.bg-login
+		.container.mx-auto.min-h-screen
+			.flex.justify-center.px-6
+				div(class='xl:w-2/4 lg:w-6/12')
+					include ../layout/flash
+			.flex.justify-center.px-6.my-6
+				// Row
+				.w-full.flex.flex-col(class='xl:w-2/4 lg:w-6/12')
+					.w-full.p-5.rounded-lg.bg-white.shadow-2xl
+						section.mt-4.text-center
+							h3.text-2xl Connexion
+						section.my-6.px-10
+							form(action="/web/auth/login",method="post")
+								.mb-4
+									label.block.mb-2.text-sm.font-bold.text-gray-700(for='login')
+										| Identifiant
+									input#login.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', type='text',name="login")
+									p#login-msg.text-xs.italic.text-red-500.hidden Champ requis
+								.mb-4
+									label.block.mb-2.text-sm.font-bold.text-gray-700(for='password')
+										| Mot de passe
+									input#password.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200',name="password", type='password')
+									p#password-msg.text-xs.italic.text-red-500.hidden Champ requis
+									a.inline-block.text-sm.text-eminence-500.align-baseline.mt-2(class='hover:text-eminence-800' href='/web/auth/forgotPassword')
+										| Mot de passe oublié ?
+								button.w-full.text-white.bg-eminence-500.border-0.py-2.px-6.rounded.text-lg.transition-colors.duration-200.ease-in-out.text-center(class='focus:outline-none hover:bg-eminence-600', type='submit')
+									| Connexion
+					section.my-10.text-center
+						a.inline-block.text-sm.text-white.align-baseline.duration-200.ease-in-out.transform(class='hover:text-night-shadz-100' href='/web/auth/register')
+							p Pas encore de compte ? 
+								span.font-semibold Créer en un maintenant
+					.border-t
+					section.mt-10.text-center.flex.flex-col.space-y-2
+						a(href="/auth/facebook")
+							div.flex.flex-row.justify-center.items-center.w-full.text-white.bg-white.border-0.py-2.px-6.rounded.text-lg.transition-colors.duration-200.ease-in-out(class='focus:outline-none')
+								i.w-12.fab.fa-facebook-f.text-blue-700
+								span.text-black.font-semibold Connexion avec Facebook
+						a(href="/auth/google")
+							div.w-full.text-white.bg-white.border-0.py-2.px-6.rounded.text-lg.transition-colors.duration-200.ease-in-out(class='focus:outline-none')
+								i.w-12.fab.fa-google.text-red-500
+								span.text-black.font-semibold  Connexion avec Google
+
+	script.
+		let form  = document.getElementsByTagName('form')[0];
+		let login = document.getElementById('login');
+		let password = document.getElementById('password');
+		let loginMsg = document.getElementById('login-msg');
+		let passwordMsg = document.getElementById('password-msg');
+		form.addEventListener("submit", function (event) {
+			// Chaque fois que l'utilisateur tente d'envoyer les données
+			// on vérifie que le champ email est valide.
+			if(login.value === null || login.value.trim() === ""){
+				login.classList.add("border-red-500");
+				loginMsg.classList.remove("hidden");
+				event.preventDefault();
+			}else{
+				login.classList.remove("border-red-500");
+				loginMsg.classList.add("hidden");
+			}
+
+			if(password.value === null || password.value.trim() === ""){
+				password.classList.add("border-red-500");
+				passwordMsg.classList.remove("hidden");
+				event.preventDefault();
+			}else{
+				password.classList.remove("border-red-500");
+				passwordMsg.classList.add("hidden");
+			}
+		}, false);
+

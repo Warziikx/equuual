@@ -1,0 +1,41 @@
+extends ../layout/base
+
+block include
+  link(rel='stylesheet' href='https://unpkg.com/flickity@2/dist/flickity.min.css' media='screen')
+  script(src='https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js')
+
+block content
+  .container.mx-auto(class="px-4 xl:px-0")
+    .py-6.text-gray-900.transition.duration-500.ease-in-out(class='dark:text-gray-500')
+      .w-full.mx-auto
+        include ../layout/flash
+        .w-full.p-5
+          form(action="/web/account",method="post")
+            .mb-4
+              label.block.mb-2.text-sm.font-bold.text-gray-700(for='displayName')
+                | Nom d'affichage
+              input#displayName.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200'  type='text'  placeholder="Le nom qui va s'afficher dans les groupes" name="displayName" value=`${session.user.displayName}`)
+              p#displayName-msg.text-xs.italic.text-red-500.hidden Champ requis
+            .mb-12
+              input(type="hidden",name="img" id="img-input" value=`${customerImg[0].id}`)
+              label.block.mb-2.text-sm.font-bold.text-gray-700(for='password-confirm')
+                | Avatar
+              .main-carousel.mb-12
+                each img,index in customerImg
+                  .carousel-cell.h-32.w-full.flex.items-center.justify-center
+                    img.max-h-full.block(src=`${img.url}` data-id=`${img.id}` id=`img${index}`)
+            .mb-6.text-center
+              button.w-full.text-white.shadow.bg-eminence-500.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='focus:outline-none hover:shadow-lg', type='submit')
+                | Modifier
+block footer
+  script.
+    let imageDisponible = !{JSON.stringify(customerImg)}
+    let customerImage = !{JSON.stringify(session.user.image)}
+
+    let imgInput = document.getElementById('img-input')
+    var flkty = new Flickity( '.main-carousel', {});
+    flkty.on( 'change', function(index){
+      imgInput.value = document.getElementById("img" + (index)).getAttribute("data-id");
+    } );
+    let index = imageDisponible.findIndex(x => x.id === customerImage.id)
+    flkty.select(index,false,true)

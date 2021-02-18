@@ -1,0 +1,76 @@
+// Modal
+.modal.opacity-0.pointer-events-none.fixed.w-full.h-full.top-0.left-0.flex.items-center.justify-center.transition.duration-200.ease-in-out
+  .modal-overlay.absolute.w-full.h-full.bg-gray-900.opacity-75
+  .modal-container.bg-gray-100.mx-auto.rounded.shadow-lg.z-50.overflow-y-auto(class='w-11/12 md:max-w-md')
+    .modal-close.absolute.top-0.right-0.cursor-pointer.flex.flex-col.items-center.mt-4.mr-4.text-white.text-sm.z-50
+      svg.fill-current.text-white(xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18')
+        path(d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z')
+      span.text-sm (Esc)
+    // Add margin if you want to see some of the overlay behind the modal
+    .modal-content.py-4.text-left.px-6
+      // Title
+      .flex.justify-between.items-center.pb-3
+        p#modalTitle.text-2xl.uppercase.font-semibold.tracking-wide Créer un groupe
+        .modal-close.cursor-pointer.z-50
+          svg.fill-current.text-black(xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18')
+            path(d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z')
+      // Bodyc 
+      form#groupForm.pt-6.pb-8(action="/web/group",method="post")
+        div
+          label.block.mb-2.text-sm.font-bold.text-gray-700(for='name')
+            | Nom
+          input#name.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200' type='text' placeholder='Nom du groupe' name="name" required)
+          p#name-msg.text-xs.italic.text-red-500.hidden Champ requis
+      //Action
+      .flex.justify-start.pt-2.space-x-2
+        button#submitButton.text-white.bg-eminence-500.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg',type="submit",form='groupForm') 
+          span#submitText.font-bold Créer
+        button.modal-close.text-white.bg-sandy-brown.shadow.border-0.py-2.px-6.rounded.text-lg.transition.duration-200.ease-in-out.text-center(class='hover:shadow-lg') Fermer
+script.
+  var publicationDateInput = document.getElementById('publication-date')
+  var nameInput = document.getElementById('name');
+  var groupForm = document.getElementById('groupForm');
+  var submitButton = document.getElementById('submitButton');
+  var submitText = document.getElementById('submitText');
+  var modalTitle = document.getElementById("modalTitle")
+
+  const overlay = document.querySelector('.modal-overlay')
+  overlay.addEventListener('click', toggleModal)
+    
+  var closemodal = document.querySelectorAll('.modal-close')
+  for (var i = 0; i < closemodal.length; i++) {
+    closemodal[i].addEventListener('click', toggleModal)
+  }
+  document.onkeydown = function(evt) {
+    evt = evt || window.event
+    var isEscape = false
+    if ("key" in evt) {
+      isEscape = (evt.key === "Escape" || evt.key === "Esc")
+    } else {
+      isEscape = (evt.keyCode === 27)
+    }
+    if (isEscape && document.body.classList.contains('modal-active')) {
+      toggleModal()
+    }
+  };
+  function toggleModal () {
+    const body = document.querySelector('body')
+    const modal = document.querySelector('.modal')
+    modal.classList.toggle('opacity-0')
+    modal.classList.toggle('pointer-events-none')
+    body.classList.toggle('modal-active')
+  }
+  function fillData(name = null){
+    nameInput.value = name;
+
+  }
+  function setNew(){
+    groupForm.action = '/web/group'
+    submitText.innerHTML  = "Créer"
+    modalTitle.innerHTML = "Créer un groupe"
+  }
+  function setEdit(id){
+    groupForm.action = `/web/group/${id}`
+    submitText.innerHTML  = "Modifier"
+    modalTitle.innerHTML = "Modifier un groupe"
+  }

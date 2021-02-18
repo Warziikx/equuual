@@ -1,0 +1,55 @@
+extends ../layout/base_without_menu
+
+block content
+	// Container
+	.bg-defineLogin
+		.container.mx-auto.min-h-screen
+			.flex.justify-center.px-6
+				div(class='xl:w-2/4 lg:w-6/12')
+					include ../layout/flash
+			.flex.justify-center.px-6.my-6
+				// Row
+				.w-full.flex(class='xl:w-2/4 lg:w-6/12')
+					.w-full.p-5.rounded-lg.bg-white.shadow-2xl
+						section.mt-10.text-center
+							h3.text-2xl Une dernière chose
+							p.text-gray-700.pt-2.px-4 
+								| Avant de pouvoir utiliser notre application vous devez definir un identifiant qui va vous permettre d'être retrouver par vos amis.
+						section.mt-10
+							form.px-8.mb-4(action="/web/auth/defineLogin",method="post")
+								.mb-4
+									label.block.mb-2.text-sm.font-bold.text-gray-700(for='login')
+										| Identifiant
+									input#login.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', type='text',name="login")
+									p#login-msg.text-xs.italic.text-red-500.hidden Champ requis
+								.mb-2.text-center
+									button.w-full.text-white.bg-night-shadz-500.border-0.py-2.px-6.rounded.text-lg.transition-colors.duration-200.ease-in-out(class='focus:outline-none hover:bg-night-shadz-600', type='submit')
+										| Valider
+	script.
+		let form  = document.getElementsByTagName('form')[0];
+		let login = document.getElementById('login');
+		let password = document.getElementById('password');
+		let loginMsg = document.getElementById('login-msg');
+		let passwordMsg = document.getElementById('password-msg');
+		form.addEventListener("submit", function (event) {
+			// Chaque fois que l'utilisateur tente d'envoyer les données
+			// on vérifie que le champ email est valide.
+			if(login.value === null || login.value.trim() === ""){
+				login.classList.add("border-red-500");
+				loginMsg.classList.remove("hidden");
+				event.preventDefault();
+			}else{
+				login.classList.remove("border-red-500");
+				loginMsg.classList.add("hidden");
+			}
+
+			if(password.value === null || password.value.trim() === ""){
+				password.classList.add("border-red-500");
+				passwordMsg.classList.remove("hidden");
+				event.preventDefault();
+			}else{
+				password.classList.remove("border-red-500");
+				passwordMsg.classList.add("hidden");
+			}
+		}, false);
+

@@ -1,0 +1,221 @@
+extends ../layout/base
+
+block include
+  script(src='https://code.jquery.com/jquery-3.5.1.min.js' integrity='sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=' crossorigin='anonymous')
+  script(src='https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js')
+  script(src="/javascripts/datatables.js")
+  link(href='https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css' rel='stylesheet')
+  link(rel='stylesheet' href='/stylesheets/datatables_tailwind.css')
+block content
+  .container.mx-auto(class="px-4 xl:px-0")
+    .py-6.text-gray-900.transition.duration-500.ease-in-out(class='dark:text-gray-500')
+      .w-full.mx-auto
+        include ../layout/flash
+          if archiveText
+            .flex.flex-row.items-center.justify-between.mb-8.px-4
+              a.w-8.h-8.rounded-full.bg-sandy-brown.shadow.flex.items-center.text-center.transition.duration-200.ease-in-out(class="hover:shadow-lg" href=`/web/group/${group.id}`)
+                i.w-8.text-xl.fas.fa-arrow-left
+              h2.text-2xl.text-sandy-brown.tracking-widest.font-bold Archive : #{archiveText}
+              //- a.text-lg.duration-700.ease-in-out(href=`/web/group/${group.id}` class="hover:text-night-shadz") 
+          .grid.grid-cols-12(class="xl:gap-4")
+            section.col-span-12(class="xl:col-span-8")
+              #spend.space-y-8.px-4(class="xl:block")
+                .flex.flex-row.justify-between
+                  div
+                    h6.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm  Dépense Total
+                    p.text-gray-600.font-bold.text-2xl #{group.totalAmount} €
+                  div.flex.flex-col.text-right
+                    h6.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm  Vos dépenses
+                    p.text-gray-600.font-bold.text-2xl #{group.customerAmount} €
+                div
+                  a(href=`/web/group/${group.id}/spend/new`)
+                    .w-full.h-full.rounded-md.bg-white.shadow.text-xl.flex.flex-row.justify-center.items-center.p-4.transition.duration-200.ease-in-out.font-bold(class='hover:shadow-lg')
+                      i.w-12.fas.fa-plus.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent
+                      h1.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Ajouter une dépense
+                div.space-y-2
+                  each spend,index in group.spends
+                    a.flex.flex-row.justify-between(href=`/web/group/${group.id}/spend/${spend.id}`)
+                      .flex.flex-row
+                        if spend.category != null
+                          img.w-12.h-12.fas.p-1.mr-2(src=`${spend.category.illustration_path}`)
+                        .flex.flex-col
+                          p.leading-5.text-gray-700.font-semibold.text-lg #{spend.name}
+                          p.text-sm.text-gray-600 payé par 
+                            span.text-gray-900 #{spend.payer.displayName}
+                      .flex.flex-col
+                        p.text-lg.text-night-shadz #{spend.amount.toFixed(2)} €
+                        p.text-sm.text-right.text-gray-600 #{prettyDate(spend.date)}
+                    if index !== group.spends.length - 1
+                      .border(class='dark:border-gray-700')   
+            section.col-span-12(class="xl:col-span-4 xl:space-y-4")
+              #debt.hidden.space-y-4.px-4(class="xl:block")
+                if debts.length > 0        
+                  h3.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm Exemple de remboursement
+                  each debt,index in debts
+                    .rounded-md.bg-gray-200-sm.flex.flex-col.text-center
+                      p.pt-4 #{debt.from} doit 
+                        span.text-pink-600 #{debt.amount.toFixed(2)} € 
+                        | à #{debt.to}
+                      form#debtForm.m-4.flex.flex-row(method="POST" action="")
+                        input(type="hidden" value=`${debt.from}` name="from")
+                        input(type="hidden" value=`${debt.to}` name="to")
+                        input(type="hidden" value=`${debt.fromId}` name="fromId")
+                        input(type="hidden" value=`${debt.toId}` name="toId")
+                        input(type="hidden" value=`${debt.amount.toFixed(2)}` name="amount")
+                        button.w-full.rounded-md.py-2.bg-white.shadow.uppercase.font-semibold.tracking-wide.transition.duration-200.ease-in-out(class="hover:shadow-lg" type="submit" form='debtForm' formaction=`/web/group/${group.id}/refund`) 
+                          span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Rembourser
+                        if archiveText
+                          input(type="hidden" value=`${archiveId}` name="archiveId")
+                          button.ml-4.w-full.rounded-md.py-2.bg-white.shadow.uppercase.font-semibold.tracking-wide.transition.duration-200.ease-in-out(class="hover:shadow-lg" type="submit" form='debtForm' formaction=`/web/group/${group.id}/report`) 
+                            span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Reporter
+              #member.hidden.space-y-4.px-4(class="xl:block")
+                h3.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm Membres
+                if customer.userFriends.length > 0
+                  button.w-full.rounded-md.py-2.bg-white.shadow.uppercase.font-semibold.tracking-wide.transition.duration-200.ease-in-out(class='hover:shadow-lg' onclick="addMember()")
+                    span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Ajouter un membre
+                .flex.flex-row.items-center.p-4
+                  img.w-12.fas.p-1.mr-6.bg-white-rock.rounded-full(src=`${group.creator.image.url}`)
+                  .flex.flex-col
+                    h6.text-lg #{group.creator.displayName}
+                    p.text-sm @#{group.creator.login}
+                each member,index in group.member
+                  .flex.flex-row.items-center.p-4
+                    img.w-12.fas.p-1.mr-6.bg-white-rock.rounded-full(src=`${member.image.url}`)
+                    .flex.flex-col
+                      h6.text-lg #{member.displayName}
+                      if member.login != member.displayName
+                        p.text-sm @#{member.login}
+              #setting.hidden.space-y-4.px-4(class="xl:block")
+                if archive != null && archive.length > 0
+                  h3.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm Archive
+                  .grid.grid-cols-12.gap-4
+                    each month,index in archive
+                      a.col-span-4.rounded-md.bg-white.shadow.text-center.p-4.transition.duration-200.ease-in-out(class='hover:shadow-lg' href=`/web/group/${group.id}/archive/${month.key}`)
+                        p #{month.display}
+                h3.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm Paramètres
+
+                button.w-full.py-2.rounded-md.bg-white.shadow.justify-between.items-center.transition.duration-200.ease-in-out(class='hover:shadow-lg' onclick=`location.href='/web/group/${group.id}/stats'`)
+                  .text-xl.flex.flex-row.justify-center.items-center.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent
+                    h1.font-semibold.tracking-wide Découvrir les statistiques
+                button.w-full.py-2.rounded-md.bg-white.shadow.justify-between.items-center.transition.duration-200.ease-in-out(class='hover:shadow-lg' onclick="changeSettings()")
+                  .text-xl.flex.flex-row.justify-center.items-center.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent
+                    h1.font-semibold.tracking-wide Modifier les options
+      include ./member/addMemberModal.pug
+      include ./options/changeSettingModal.pug
+block footer
+  include ./groupBottomNav.pug
+    script.
+      $(document).ready( function () {
+        $('#dataTables').DataTable({
+          language : datatablesLanguage,
+          order: [[ 0, "asc" ]],
+          columnDefs: [
+            { width: 40, targets: 2 },
+          ],
+        });
+      });
+      function addMember(){
+        toggleMemberModal()
+      }
+      function changeSettings(){
+        toggleOptionsModal()
+      }
+      function removeMember(id,memberId){
+        var answer = window.confirm("Êtes vous sur de vouloir retirer cet utilisateur du groupe");
+        if (answer) {
+          window.location.href = `/web/group/${id}/member/${memberId}/remove`;
+        }
+        else {
+
+        }
+      }
+      let spend = document.getElementById("spend");
+      let member = document.getElementById("member");
+      let debt = document.getElementById("debt");
+      let setting = document.getElementById("setting");
+
+      let spendLi = document.getElementById("spendLi");
+      let memberLi = document.getElementById("memberLi");
+      let debtLi = document.getElementById("debtLi");
+      let settingLi = document.getElementById("settingLi");
+
+      let spendA = document.getElementById("spendA");
+      let memberA = document.getElementById("memberA");
+      let debtA = document.getElementById("debtA");
+      let settingA = document.getElementById("settingA");
+
+      function showSpend(){
+
+        spendA.classList.addMany("text-eminence bg-gray-200")
+        spendA.classList.removeMany("hover:shadow-lg")
+
+        memberA.classList.removeMany("text-eminence bg-gray-200")
+        memberA.classList.add("hover:shadow-lg")
+
+        debtA.classList.removeMany("text-eminence bg-gray-200 hover:shadow-lg")
+        debtA.classList.add("hover:shadow-lg")
+
+        settingA.classList.removeMany("text-eminence bg-gray-200")
+        settingA.classList.add("hover:shadow-lg")
+
+        spend.classList.remove("hidden");
+        member.classList.add("hidden");
+        debt.classList.add("hidden");
+        setting.classList.add("hidden");
+      }
+      function showMember(){
+
+        spendA.classList.removeMany("text-eminence bg-gray-200")
+        spendA.classList.add("hover:shadow-lg")
+
+        memberA.classList.addMany("text-eminence bg-gray-200")
+        memberA.classList.removeMany("hover:shadow-lg")
+
+        debtA.classList.removeMany("text-eminence bg-gray-200 hover:shadow-lg")
+        debtA.classList.add("hover:shadow-lg")
+
+        settingA.classList.removeMany("text-eminence bg-gray-200")
+        settingA.classList.add("hover:shadow-lg")
+
+        spend.classList.add("hidden");
+        member.classList.remove("hidden");
+        debt.classList.add("hidden");
+        setting.classList.add("hidden");
+      }
+      function showDebt(){
+
+        spendA.classList.removeMany("text-eminence bg-gray-200")
+        spendA.classList.add("hover:shadow-lg")
+
+        memberA.classList.removeMany("text-eminence bg-gray-200")
+        memberA.classList.add("hover:shadow-lg")
+
+        debtA.classList.addMany("text-eminence bg-gray-200 hover:shadow-lg")
+
+        settingA.classList.removeMany("text-eminence bg-gray-200")
+        settingA.classList.add("hover:shadow-lg")
+
+        spend.classList.add("hidden");
+        member.classList.add("hidden");
+        debt.classList.remove("hidden");
+        setting.classList.add("hidden");
+      }
+      function showSetting(){
+
+        spendA.classList.removeMany("text-eminence bg-gray-200")
+        spendA.classList.add("hover:shadow-lg")
+
+        memberA.classList.removeMany("text-eminence bg-gray-200")
+        memberA.classList.add("hover:shadow-lg")
+
+        debtA.classList.removeMany("text-eminence bg-gray-200 hover:shadow-lg")
+        debtA.classList.add("hover:shadow-lg")
+
+        settingA.classList.addMany("text-eminence bg-gray-200")
+        settingA.classList.removeMany("hover:shadow-lg")
+
+        spend.classList.add("hidden");
+        member.classList.add("hidden");
+        //debt.classList.add("hidden");
+        setting.classList.remove("hidden");
+      }

@@ -1,0 +1,125 @@
+extends ../layout/base_without_menu
+block include
+	link(rel='stylesheet' href='https://unpkg.com/flickity@2/dist/flickity.min.css' media='screen')
+	script(src='https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js')
+block content
+	// Container
+	.bg-register
+		.container.mx-auto.min-h-screen
+			.flex.justify-center.px-6
+				div(class='xl:w-2/4 lg:w-6/12')
+					include ../layout/flash
+			.flex.justify-center.px-6.my-6
+				// Row
+				.w-full.flex.flex-col(class='xl:w-2/4 lg:w-6/12')
+					.w-full.p-5.rounded.bg-white.shadow-2xl
+						section.mt-4.text-center
+							h3.text-2xl Inscription
+						section.my-6.px-10
+							form(action="/web/auth/register",method="post")
+								.mb-4
+									label.block.mb-2.text-sm.font-bold.text-gray-700(for='login')
+										| Identifiant
+									input#login.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', type='text',name="login")
+									p#login-msg.text-xs.italic.text-red-500.hidden Champ requis
+								.mb-4
+									label.block.mb-2.text-sm.font-bold.text-gray-700(for='login')
+										| Adresse email
+									input#email.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', type='email',name="email")
+									p#email-msg.text-xs.italic.text-red-500.hidden Champ requis
+								.mb-4
+									label.block.mb-2.text-sm.font-bold.text-gray-700(for='password')
+										| Mot de passe
+									input#password.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200',name="password", type='password')
+									p#password-msg.text-xs.italic.text-red-500.hidden Champ requis
+								.mb-4
+									label.block.mb-2.text-sm.font-bold.text-gray-700(for='password-confirm')
+										| Confirmation
+									input#password-confirm.w-full.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200', name="password-confirm", type='password')
+									p#password-confirm-msg.text-xs.italic.text-red-500.hidden Champ requis
+									p#password-confirm-msg-match.text-xs.italic.text-red-500.hidden Les deux mots de passes doivent être identiques
+								.mb-12
+									input(type="hidden",name="img" id="img-input" value=`${customerImg[0].id}`)
+									label.block.mb-2.text-sm.font-bold.text-gray-700(for='password-confirm')
+										| Avatar
+									.main-carousel
+										each img,index in customerImg
+											.carousel-cell.h-32.w-full.flex.items-center.justify-center
+												img.max-h-full.block(src=`${img.url}` data-id=`${img.id}` id=`img${index}`)
+								.text-center
+									button.w-full.text-white.bg-sandy-brown-500.border-0.py-2.px-6.rounded.text-lg.transition-colors.duration-200.ease-in-out.text-center(class='focus:outline-none hover:bg-sandy-brown-600' type='submit')
+										| Inscription
+								//- .text-center
+								//- 	a.inline-block.text-sm.text-night-shadz-500.align-baseline(class='hover:text-night-shadz-800' href='/web/auth/forgotPassword')
+								//- 		| Mot de passe oublié ?
+					section.my-10.text-center
+						a.inline-block.text-sm.text-white.align-baseline.duration-200.ease-in-out.transform(class='hover:text-night-shadz-100' href='/web/auth/login')
+							p Vous avez déjà un compte ? 
+								span.font-semibold Connecter-vous !
+
+	script.
+		let imgInput = document.getElementById('img-input')
+		var flkty = new Flickity( '.main-carousel', {
+		});
+		flkty.on( 'change', function(index){
+			imgInput.value = document.getElementById("img" + (index)).getAttribute("data-id");
+		} );
+
+		let form  = document.getElementsByTagName('form')[0];
+		let login = document.getElementById('login');
+		let email = document.getElementById('email');
+		let password = document.getElementById('password');
+		let passwordConfirm = document.getElementById('password-confirm');
+		let loginMsg = document.getElementById('login-msg');
+		let emailMsg = document.getElementById('email-msg');
+		let passwordMsg = document.getElementById('password-msg');
+		let passwordConfirmMsg = document.getElementById('password-confirm-msg');
+		let passwordConfirmMsgMatch = document.getElementById('password-confirm-msg-match');
+		form.addEventListener("submit", function (event) {
+			// Chaque fois que l'utilisateur tente d'envoyer les données
+			// on vérifie que le champ email est valide.
+			if(login.value === null || login.value.trim() === ""){
+				login.classList.add("border-red-500");
+				loginMsg.classList.remove("hidden");
+				event.preventDefault();
+			}else{
+				login.classList.remove("border-red-500");
+				loginMsg.classList.add("hidden");
+			}
+
+			if(email.value === null || email.value.trim() === ""){
+				email.classList.add("border-red-500");
+				emailMsg.classList.remove("hidden");
+				event.preventDefault();
+			}else{
+				email.classList.remove("border-red-500");
+				emailMsg.classList.add("hidden");
+			}
+
+			if(password.value === null || password.value.trim() === ""){
+				password.classList.add("border-red-500");
+				passwordMsg.classList.remove("hidden");
+				event.preventDefault();
+			}else{
+				password.classList.remove("border-red-500");
+				passwordMsg.classList.add("hidden");
+			}
+
+			if(passwordConfirm.value === null || passwordConfirm.value.trim() === ""){
+				passwordConfirm.classList.add("border-red-500");
+				passwordConfirmMsg.classList.remove("hidden");
+				event.preventDefault();
+			}else{
+				passwordConfirm.classList.remove("border-red-500");
+				passwordConfirmMsg.classList.add("hidden");
+			}
+			if(passwordConfirm.value !== password.value){
+				passwordConfirm.classList.add("border-red-500");
+				passwordConfirmMsgMatch.classList.remove("hidden");
+				event.preventDefault();
+			}else{
+				passwordConfirm.classList.remove("border-red-500");
+				passwordConfirmMsgMatch.classList.add("hidden");
+			}
+		}, false);
+
