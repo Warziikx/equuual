@@ -171,7 +171,7 @@ const groupController = {
 			let group = await groupDao.readOne({ where: { id: groupId } });
 			if (group == null) throw new WsException(40402);
 			let data = {};
-			let spent = await spendDao.read({ where: { group_id: group.id }, include: [{ model: models.customer, as: "payer" }], order: [["date", "desc"]] });
+			let spent = await spendServices.getSpendWithGroupId(groupId);
 			data.customerAmount = spent !== null ? spendServices.amountOfCustomer(spent, connecterCustomerId) : 0;
 			data.totalAmount = spent !== null ? spendServices.getTotalAmount(spent) : 0;
 			data.spends = spent;
