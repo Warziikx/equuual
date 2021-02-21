@@ -180,7 +180,7 @@ const spendController = {
 		try {
 			let { id, spendId } = req.params;
 			if (id == null || spendId == null) throw new WebException(40000);
-			let { name, amount, payer, date, participantId, participe, part } = req.body;
+			let { name, amount, payer, date, participantId, participe, part, category } = req.body;
 			if (name == null || amount == null || payer == null || participantId == null || participe == null || part == null) throw new WebException(40000);
 			let group = await groupDao.readOne({
 				where: { id: id },
@@ -196,6 +196,7 @@ const spendController = {
 			spend = await spendDao.update(spend, {
 				name: name,
 				amount: amount,
+				category_id: category,
 				payer_id: payer,
 				group_id: group.id,
 				date: new Date(explodedDate[2], explodedDate[1] - 1, explodedDate[0]),

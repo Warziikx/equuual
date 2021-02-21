@@ -22,7 +22,11 @@ const friendController = {
 					{ model: models.customer, as: "userFriends", include: [{ model: models.customer_img, as: "image" }] },
 				],
 			});
-			res.send([...customer.friends, ...customer.userFriends]);
+			let friend = [...customer.friends, ...customer.userFriends].filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i);
+			let waitingForTheirResponse = friend.filter((item) => !item.friend.accepted && item.friend.customer_id_1 === customerId);
+			let waitingForYourResponse = friend.filter((item) => !item.friend.accepted && item.friend.customer_id_1 !== customerId);
+			let mutualFriend = friend.filter((item) => item.friend.accepted);
+			res.send({ waitingForTheirResponse, waitingForYourResponse, mutualFriend });
 		} catch (err) {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + "- getFriends" });
