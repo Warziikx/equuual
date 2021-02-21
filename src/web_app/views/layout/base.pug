@@ -56,7 +56,7 @@ html
                     a.flex.flex-row.items-center.w-auto.mr-4.relative.float-right.cursor-pointer.transition.duration-200.ease-in-out.rounded-lg(class='hover:bg-gray-400',href='/web/account')
                         if session.user
                             span.mx-2(class='hidden sm:inline') Bienvenue #{session.user.displayName}
-                        img.w-8.rounded-full(src=`${session.user.image.url}`)
+                        img.w-8.rounded-full(src=`${session.user.customerImg.url}`)
             main.flex-1.overflow-y-auto.bg-gray-100
                 block content
             block footer

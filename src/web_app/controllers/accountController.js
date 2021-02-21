@@ -27,7 +27,7 @@ const accountController = {
 			let customer = await customerDao.readOne({ where: { id: customer_id } });
 			if (customer == null) throw new WebException(40900);
 			customer = await customerDao.update(customer, { displayName: displayName.trim(), img_id: img });
-			customer = await customerDao.readOne({ where: { id: customer.id }, include: [{ model: models.customer_img, as: "image" }] });
+			customer = await customerDao.readOne({ where: { id: customer.id }, include: [{ model: models.customer_img, as: "customerImg" }] });
 			req.session.user = customer;
 			res.locals.user = customer;
 			res.redirect("/web/account");

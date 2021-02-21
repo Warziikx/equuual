@@ -17,9 +17,9 @@ const accountController = {
 			let customer = await customerDao.readOne({
 				where: { id: customerId },
 				include: [
-					{ model: models.customer_img, as: "image" },
-					{ model: models.customer, as: "friends", through: models.friend, include: [{ model: models.customer_img, as: "image" }] },
-					{ model: models.customer, as: "userFriends", include: [{ model: models.customer_img, as: "image" }] },
+					{ model: models.customer_img, as: "customerImg" },
+					{ model: models.customer, as: "friends", through: models.friend, include: [{ model: models.customer_img, as: "customerImg" }] },
+					{ model: models.customer, as: "userFriends", include: [{ model: models.customer_img, as: "customerImg" }] },
 				],
 			});
 			res.send(customer);
@@ -32,7 +32,6 @@ const accountController = {
 			res.send(err);
 		}
 	},
-
 };
 
 module.exports = accountController;

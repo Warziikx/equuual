@@ -74,13 +74,13 @@ block content
                   button.w-full.rounded-md.py-2.bg-white.shadow.uppercase.font-semibold.tracking-wide.transition.duration-200.ease-in-out(class='hover:shadow-lg' onclick="addMember()")
                     span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Ajouter un membre
                 .flex.flex-row.items-center.p-4
-                  img.w-12.fas.p-1.mr-6.bg-white-rock.rounded-full(src=`${group.creator.image.url}`)
+                  img.w-12.fas.p-1.mr-6.bg-white-rock.rounded-full(src=`${group.creator.customerImg.url}`)
                   .flex.flex-col
                     h6.text-lg #{group.creator.displayName}
                     p.text-sm @#{group.creator.login}
                 each member,index in group.member
                   .flex.flex-row.items-center.p-4
-                    img.w-12.fas.p-1.mr-6.bg-white-rock.rounded-full(src=`${member.image.url}`)
+                    img.w-12.fas.p-1.mr-6.bg-white-rock.rounded-full(src=`${member.customerImg.url}`)
                     .flex.flex-col
                       h6.text-lg #{member.displayName}
                       if member.login != member.displayName

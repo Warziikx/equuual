@@ -20,12 +20,12 @@ const groupServices = {
 				{
 					model: models.customer,
 					as: "creator",
-					include: [{ model: models.customer_img, as: "image" }],
+					include: [{ model: models.customer_img, as: "customerImg" }],
 				},
 				{
 					model: models.customer,
 					as: "member",
-					include: [{ model: models.customer_img, as: "image" }],
+					include: [{ model: models.customer_img, as: "customerImg" }],
 				},
 				{
 					model: models.spend,
@@ -53,12 +53,12 @@ const groupServices = {
 				{
 					model: models.customer,
 					as: "creator",
-					include: [{ model: models.customer_img, as: "image" }],
+					include: [{ model: models.customer_img, as: "customerImg" }],
 				},
 				{
 					model: models.customer,
 					as: "member",
-					include: [{ model: models.customer_img, as: "image" }],
+					include: [{ model: models.customer_img, as: "customerImg" }],
 				},
 				{
 					model: models.spend,

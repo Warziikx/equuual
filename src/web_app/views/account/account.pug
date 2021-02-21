@@ -8,7 +8,7 @@ block content
       .w-full.mx-auto
         include ../layout/flash
         .flex.flex-col.items-center.space-y-8
-          img.w-48.bg-white-rock.rounded-full(src=`${session.user.image.url}`)
+          img.w-48.bg-white-rock.rounded-full(src=`${session.user.customerImg.url}`)
           .flex.flex-col.items-center
             h1.text-4xl.tracking-wide.text-gray-600.font-semibold #{session.user.displayName}
             h3 @#{session.user.login}

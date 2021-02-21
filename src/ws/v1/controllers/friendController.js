@@ -18,8 +18,8 @@ const friendController = {
 			let customer = await customerDao.readOne({
 				where: { id: customerId },
 				include: [
-					{ model: models.customer, as: "friends", through: models.friend, include: [{ model: models.customer_img, as: "image" }] },
-					{ model: models.customer, as: "userFriends", include: [{ model: models.customer_img, as: "image" }] },
+					{ model: models.customer, as: "friends", through: models.friend, include: [{ model: models.customer_img, as: "customerImg" }] },
+					{ model: models.customer, as: "userFriends", include: [{ model: models.customer_img, as: "customerImg" }] },
 				],
 			});
 			let friend = [...customer.friends, ...customer.userFriends].filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i);

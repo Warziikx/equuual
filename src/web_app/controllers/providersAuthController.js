@@ -33,7 +33,7 @@ passport.use(
 			let user = await customerDao.readOne({
 				where: { provider_id: profile.id },
 				include: [
-					{ model: models.customer_img, as: "image" },
+					{ model: models.customer_img, as: "customerImg" },
 					{ model: models.customer_origin, as: "origin", where: { origin_name: "facebook" }, required: true },
 				],
 			});
@@ -49,7 +49,7 @@ passport.use(
 				let newCustomer = await customerDao.readOne({
 					where: { provider_id: profile.id },
 					include: [
-						{ model: models.customer_img, as: "image" },
+						{ model: models.customer_img, as: "customerImg" },
 						{ model: models.customer_origin, as: "origin", where: { origin_name: "facebook" }, required: true },
 					],
 				});
@@ -72,7 +72,7 @@ passport.use(
 			let user = await customerDao.readOne({
 				where: { provider_id: profile.id },
 				include: [
-					{ model: models.customer_img, as: "image" },
+					{ model: models.customer_img, as: "customerImg" },
 					{ model: models.customer_origin, as: "origin", where: { origin_name: "google" }, required: true },
 				],
 			});
@@ -82,7 +82,7 @@ passport.use(
 				let newCustomer = await customerDao.readOne({
 					where: { provider_id: profile.id },
 					include: [
-						{ model: models.customer_img, as: "image" },
+						{ model: models.customer_img, as: "customerImg" },
 						{ model: models.customer_origin, as: "origin", where: { origin_name: "google" }, required: true },
 					],
 				});

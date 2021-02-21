@@ -66,7 +66,7 @@ const authController = {
 			let customer = await customerDao.readOne({
 				where: { provider_id: userId },
 				include: [
-					{ model: models.customer_img, as: "image" },
+					{ model: models.customer_img, as: "customerImg" },
 					{ model: models.customer_origin, as: "origin", where: { origin_name: "facebook" }, required: true },
 				],
 			});
@@ -119,12 +119,12 @@ const authController = {
 			let customer = await customerDao.readOne({
 				where: { provider_id: userId },
 				include: [
-					{ model: models.customer_img, as: "image" },
+					{ model: models.customer_img, as: "customerImg" },
 					{ model: models.customer_origin, as: "origin", where: { origin_name: "facebook" }, required: true },
 				],
 			});
 			customer = await customerDao.update(customer, { login: login });
-			customer = await customerDao.readOne({ where: { id: customer.id }, include: [{ model: models.customer_img, as: "image" }] });
+			customer = await customerDao.readOne({ where: { id: customer.id }, include: [{ model: models.customer_img, as: "customerImg" }] });
 
 			let device = await deviceDao.readOne({ where: { udid: udid } });
 			if (device) device = await deviceDao.update(device, { customer_id: customer.id });

@@ -88,7 +88,7 @@ module.exports = function (sequelize) {
 			as: "spends",
 		});
 		Customer.belongsTo(models.customer_img, {
-			as: "image",
+			as: "customerImg",
 			foreignKey: "img_id",
 		});
 		Customer.belongsTo(models.customer_origin, {

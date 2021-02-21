@@ -92,7 +92,7 @@ const authController = {
 
 			let customer = await customerDao.readOne({ where: { id: sessionUser.id } });
 			customer = await customerDao.update(customer, { login: login });
-			customer = await customerDao.readOne({ where: { id: customer.id }, include: [{ model: models.customer_img, as: "image" }] });
+			customer = await customerDao.readOne({ where: { id: customer.id }, include: [{ model: models.customer_img, as: "customerImg" }] });
 			req.session.user = customer;
 			res.locals.user = customer;
 			res.redirect("/web/group");
@@ -110,7 +110,7 @@ const authController = {
 			let newpass = blake.blake2bHex(CONSTANTE["START_SAL"] + password + CONSTANTE["END_SAL"]);
 			let result = await customerDao.readOne({
 				where: { login: login.trim(), password: newpass },
-				include: [{ model: models.customer_img, as: "image" }],
+				include: [{ model: models.customer_img, as: "customerImg" }],
 			});
 			if (result === null) {
 				throw new WebException(40401);
@@ -134,7 +134,7 @@ const authController = {
 			let customer = await customerDao.readOne({ where: { login: login } });
 			if (customer) throw new WebException(40900);
 			customer = await customerDao.create({ login: login.trim(), displayName: login.trim(), password: newpass.trim(), img_id: img, email: email.trim() });
-			customer = await customerDao.readOne({ where: { id: customer.id }, include: [{ model: models.customer_img, as: "image" }] });
+			customer = await customerDao.readOne({ where: { id: customer.id }, include: [{ model: models.customer_img, as: "customerImg" }] });
 			req.session.user = customer;
 			res.locals.user = customer;
 			res.redirect("/web/group");

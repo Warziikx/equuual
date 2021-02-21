@@ -125,8 +125,8 @@ const groupController = {
 				attributes: [],
 				where: { id: groupId },
 				include: [
-					{ model: models.customer, as: "creator", include: [{ model: models.customer_img, as: "image" }] },
-					{ model: models.customer, as: "member", include: [{ model: models.customer_img, as: "image" }] },
+					{ model: models.customer, as: "creator", include: [{ model: models.customer_img, as: "customerImg" }] },
+					{ model: models.customer, as: "member", include: [{ model: models.customer_img, as: "customerImg" }] },
 				],
 			});
 			if (group == null) throw new WsException(40402);
