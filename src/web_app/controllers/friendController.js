@@ -18,8 +18,8 @@ const friendController = {
 			let customer = await customerDao.readOne({
 				where: { id: customer_id },
 				include: [
-					{ model: models.customer, as: "friends", through: models.friend, include: [{ model: models.customer_img, as: "image" }] },
-					{ model: models.customer, as: "userFriends", include: [{ model: models.customer_img, as: "image" }] },
+					{ model: models.customer, as: "friends", through: models.friend, include: [{ model: models.customer_img, as: "customerImg" }] },
+					{ model: models.customer, as: "userFriends", include: [{ model: models.customer_img, as: "customerImg" }] },
 				],
 			});
 			res.render("friend/friends", { customer: customer, success: req.flash("success"), err: req.flash("error") });
