@@ -30,7 +30,7 @@ block content
             if !friend.friend.accepted
               .px-5.py-4.rounded-md.bg-white.shadow.flex.flex-row.justify-between
                 div.flex.flex-row.items-center
-                  img.bg-white-rock.w-16.fas.p-1.fa-check.bg-gray-200.rounded-full(src=`${friend.image.url}`)
+                  img.bg-white-rock.w-16.fas.p-1.fa-check.bg-gray-200.rounded-full(src=`${friend.customerImg.url}`)
                   .ml-8
                     h2.text-xl @#{friend.login}
                     .text-xs.inline-flex.items-center.font-bold.leading-sm.uppercase.px-3.py-1.bg-orange-200.text-orange-700.rounded-full
@@ -43,7 +43,7 @@ block content
                     i.w-8.fas.fa-times.p-2
           each friend,index in customer.friends
             .px-5.py-4.rounded-md.bg-white.shadow.flex.flex-row.items-center
-              img.bg-white-rock.w-16.fas.p-1.fa-check.bg-gray-200.rounded-full(src=`${friend.image.url}`)
+              img.bg-white-rock.w-16.fas.p-1.fa-check.bg-gray-200.rounded-full(src=`${friend.customerImg.url}`)
               if friend.friend.accepted
                 .flex.flex-col.ml-8
                   h2.text-xl #{friend.displayName}

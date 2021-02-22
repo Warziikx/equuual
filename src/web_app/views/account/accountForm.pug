@@ -30,7 +30,7 @@ block content
 block footer
   script.
     let imageDisponible = !{JSON.stringify(customerImg)}
-    let customerImage = !{JSON.stringify(session.user.image)}
+    let customerImage = !{JSON.stringify(session.user.customerImg)}
 
     let imgInput = document.getElementById('img-input')
     var flkty = new Flickity( '.main-carousel', {});
