@@ -62,6 +62,28 @@ const friendController = {
 			res.send(err);
 		}
 	},
+	deleteFriend: async function (req, res, next) {
+		try {
+			let friendId = req.params.id;
+			let customerId = req.session.customer_id;
+			let friend = await friendDao.readOne({ where: { customer_id_1: friendId, customer_id_2: customerId } });
+			if (friend !== null) {
+				await friendDao.delete(friend);
+			}
+			let alreadyRequested = await friendDao.readOne({ where: { customer_id_1: customerId, customer_id_2: friendId } });
+			if (alreadyRequested) {
+				friendDao.delete(alreadyRequested);
+			}
+			res.send({ data: "OK" });
+		} catch (err) {
+			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
+				logger.exception({ err: err, debugMsg: FILE_NAME + "- deleteFriend" });
+			}
+			res.status(err.status);
+			delete err.status;
+			res.send(err);
+		}
+	},
 };
 
 module.exports = friendController;

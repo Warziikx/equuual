@@ -4,11 +4,8 @@ const router = express.Router();
 //CONTROLLER
 const friendController = require("../controllers/friendController");
 
-/*router.get("/:id/group", customerController.getCustomerGroups);
-router.get("/:id", customerController.getCustomer);*/
 router.get("/", friendController.getFriends);
 router.post("/", friendController.requestFriend);
-
-//router.post("/", customerController.createCustomer);
+router.delete("/:id", friendController.deleteFriend);
 
 module.exports = router;
