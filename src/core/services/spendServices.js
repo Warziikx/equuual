@@ -3,6 +3,7 @@ const { Op } = models.Sequelize;
 
 //DAO
 const spendDao = require("../dao/spendDao");
+const customerDao = require("../dao/customerDao");
 
 //UTILS
 const logger = require("../utils/logger");
@@ -163,6 +164,19 @@ const spendServices = {
 			return debt.amount > 0.01;
 		});
 		return debtArray;
+	},
+	getCustomerOfDebt: async function (debts) {
+		let newDebt = await Promise.all(
+			debts.map(async (debt) => {
+				let fromCustomer = await customerDao.readOne({ where: { id: debt.fromId } });
+				let toCustomer = await customerDao.readOne({ where: { id: debt.toId } });
+				debt.from = fromCustomer;
+				debt.to = toCustomer;
+				return debt;
+			})
+		);
+		console.log("after");
+		return newDebt;
 	},
 	getArchiveList: function (payments) {
 		let now = new Date();

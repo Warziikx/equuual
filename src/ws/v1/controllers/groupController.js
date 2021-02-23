@@ -196,8 +196,9 @@ const groupController = {
 
 			let spent = await spendServices.getSpendWithGroupId(group.id);
 			let debts = spent != null ? spendServices.splitPayments(spent) : [];
+			let debtsWithCustomer = await spendServices.getCustomerOfDebt(debts);
 
-			res.send(debts);
+			res.send(debtsWithCustomer);
 		} catch (err) {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - inviteMember" });
