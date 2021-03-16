@@ -135,7 +135,8 @@ const groupController = {
 			let options = await groupServices.getGroupOption(group);
 			let spent = null,
 				archiveText = null,
-				archive = null;
+				archive = null,
+				debts = [];
 			if (groupServices.isGroupArchiveActivated(group)) {
 				let archiveObject = otherServices.getArchiveFromId(archiveId);
 				archiveText = archiveObject.displayText;
@@ -143,12 +144,14 @@ const groupController = {
 				spent = await spendServices.getSpendWithGroupIdAndDate(id, archiveObject.firstOfMonth, archiveObject.nextMonth);
 				let allSpend = await spendServices.getSpendWithGroupId(id);
 				archive = spendServices.getArchiveList(allSpend);
+				debts = allSpend != null ? spendServices.splitPayments(allSpend) : [];
 			} else {
 				group = await groupServices.getGroupWithId(id);
 				spent = await spendServices.getSpendWithGroupId(id);
+				debts = spent != null ? spendServices.splitPayments(spent) : [];
 			}
 
-			let debts = spent != null ? spendServices.splitPayments(spent) : [];
+			//let debts = spent != null ? spendServices.splitPayments(spent) : [];
 			let friendNotInGroup = await groupServices.getFriendNotInGroup(customer_id, group);
 
 			group.customerAmount = spent !== null ? spendServices.amountOfCustomer(spent, customer_id) : 0;

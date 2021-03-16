@@ -64,10 +64,10 @@ block content
                         input(type="hidden" value=`${debt.amount.toFixed(2)}` name="amount")
                         button.w-full.rounded-md.py-2.bg-white.shadow.uppercase.font-semibold.tracking-wide.transition.duration-200.ease-in-out(class="hover:shadow-lg" type="submit" form='debtForm' formaction=`/web/group/${group.id}/refund`) 
                           span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Rembourser
-                        if archiveText
-                          input(type="hidden" value=`${archiveId}` name="archiveId")
-                          button.ml-4.w-full.rounded-md.py-2.bg-white.shadow.uppercase.font-semibold.tracking-wide.transition.duration-200.ease-in-out(class="hover:shadow-lg" type="submit" form='debtForm' formaction=`/web/group/${group.id}/report`) 
-                            span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Reporter
+                        //- if archiveText
+                        //-   input(type="hidden" value=`${archiveId}` name="archiveId")
+                        //-   button.ml-4.w-full.rounded-md.py-2.bg-white.shadow.uppercase.font-semibold.tracking-wide.transition.duration-200.ease-in-out(class="hover:shadow-lg" type="submit" form='debtForm' formaction=`/web/group/${group.id}/report`) 
+                        //-     span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Reporter
               #member.hidden.space-y-4.px-4(class="xl:block")
                 h3.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm Membres
                 if customer.userFriends.length > 0
@@ -216,6 +216,6 @@ block footer
 
         spend.classList.add("hidden");
         member.classList.add("hidden");
-        //debt.classList.add("hidden");
+        debt.classList.add("hidden");
         setting.classList.remove("hidden");
       }
