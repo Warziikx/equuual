@@ -110,13 +110,14 @@ const groupServices = {
 	},
 	getGroupOption: async function (group) {
 		let allOptions = await optionDao.read({});
-		allOptions.map((option) => {
-			option.isActive = false;
+		allOptions = allOptions.map((option) => {
+			option.dataValues.isActive = false;
 			group.options.map((groupOption) => {
 				if (groupOption.name === option.name) {
-					option.isActive = true;
+					option.dataValues.isActive = true;
 				}
 			});
+			return option;
 		});
 		return allOptions;
 	},

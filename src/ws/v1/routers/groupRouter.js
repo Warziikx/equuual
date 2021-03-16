@@ -20,4 +20,10 @@ router.get("/:id/spend", groupController.getSpends);
 //DETTE
 router.get("/:id/debt", groupController.getDebts);
 
+//ARCHIVE
+router.get("/:id/archive", groupController.getArchives);
+
+//OPTIONS
+router.get("/:id/option", groupController.getOptions);
+
 module.exports = router;

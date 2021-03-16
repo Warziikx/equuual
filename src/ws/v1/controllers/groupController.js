@@ -7,6 +7,7 @@ const spendDao = require("../../../core/dao/spendDao");
 
 //SERVICES
 const spendServices = require("../../../core/services/spendServices");
+const groupServices = require("../../../core/services/groupServices");
 
 //UTILS
 const CoreException = require("../../../core/utils/coreException");
@@ -178,7 +179,7 @@ const groupController = {
 			res.send(data);
 		} catch (err) {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
-				logger.exception({ err: err, debugMsg: FILE_NAME + " - inviteMember" });
+				logger.exception({ err: err, debugMsg: FILE_NAME + " - getSpends" });
 			}
 			res.status(err.status);
 			delete err.status;
@@ -201,7 +202,47 @@ const groupController = {
 			res.send(debtsWithCustomer);
 		} catch (err) {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
-				logger.exception({ err: err, debugMsg: FILE_NAME + " - inviteMember" });
+				logger.exception({ err: err, debugMsg: FILE_NAME + " - getDebts" });
+			}
+			res.status(err.status);
+			delete err.status;
+			res.send(err);
+			throw err;
+		}
+	},
+	getArchives: async function (req, res, next) {
+		try {
+			let groupId = req.params.id;
+			let connecterCustomerId = req.session.customer_id;
+			if (groupId == null || connecterCustomerId == null) throw new WsException(40000);
+			let group = await groupDao.readOne({ where: { id: groupId } });
+			if (group === null) throw new WebException(40402);
+			let allSpend = await spendServices.getSpendWithGroupId(groupId);
+			let archive = spendServices.getArchiveList(allSpend);
+			res.send(archive);
+		} catch (err) {
+			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
+				logger.exception({ err: err, debugMsg: FILE_NAME + " - getArchives" });
+			}
+			res.status(err.status);
+			delete err.status;
+			res.send(err);
+			throw err;
+		}
+	},
+	getOptions: async function (req, res, next) {
+		try {
+			let groupId = req.params.id;
+			let connecterCustomerId = req.session.customer_id;
+			if (groupId == null || connecterCustomerId == null) throw new WsException(40000);
+			//Récupération du group et de ses options
+			let group = await groupDao.readOne({ where: { id: groupId }, include: [{ model: models.option, as: "options", through: models.group_option }] });
+			if (group === null) throw new WebException(40402);
+			let options = await groupServices.getGroupOption(group);
+			res.send(options);
+		} catch (err) {
+			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
+				logger.exception({ err: err, debugMsg: FILE_NAME + " - getOptions" });
 			}
 			res.status(err.status);
 			delete err.status;
