@@ -1,32 +1,42 @@
 {
-  "development": {
-    "username": "kwrykdkkqvbltv",
-    "password": "250dea0c69b58de1a827b1b472a022b5dbe5f00792dce1941e4e59d69c8a7e32",
-    "database": "df4f1frbdc1fhk",
-    "host": "ec2-34-251-118-151.eu-west-1.compute.amazonaws.com",
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": {
-        "rejectUnauthorized": false
-      }
-    },
-    "timezone": "+02:00"
-  },
-  "test": {
-    "username": "kwrykdkkqvbltv",
-    "password": "250dea0c69b58de1a827b1b472a022b5dbe5f00792dce1941e4e59d69c8a7e32",
-    "database": "df4f1frbdc1fhk",
-    "host": "ec2-34-251-118-151.eu-west-1.compute.amazonaws.com",
-    "dialect": "postgres",
-    "timezone": "+02:00"
-  },
-  "production": {
-    "use_env_variable": "DATABASE_URL",
-    "username": "",
-    "password": "",
-    "database": "",
-    "host": "127.0.0.1",
-    "dialect": "postgres",
-    "timezone": "+02:00"
-  }
+	"development": {
+		"username": "kwrykdkkqvbltv",
+		"password": "250dea0c69b58de1a827b1b472a022b5dbe5f00792dce1941e4e59d69c8a7e32",
+		"database": "df4f1frbdc1fhk",
+		"host": "ec2-34-251-118-151.eu-west-1.compute.amazonaws.com",
+		"dialect": "postgres",
+		"dialectOptions": {
+			"ssl": {
+				"rejectUnauthorized": false
+			}
+		},
+		"timezone": "+02:00"
+	},
+	"test": {
+		"username": "kwrykdkkqvbltv",
+		"password": "250dea0c69b58de1a827b1b472a022b5dbe5f00792dce1941e4e59d69c8a7e32",
+		"database": "df4f1frbdc1fhk",
+		"host": "ec2-34-251-118-151.eu-west-1.compute.amazonaws.com",
+		"dialect": "postgres",
+		"timezone": "+02:00",
+		"dialectOptions": {
+			"ssl": {
+				"rejectUnauthorized": false
+			}
+		}
+	},
+	"production": {
+		"use_env_variable": "DATABASE_URL",
+		"username": "",
+		"password": "",
+		"database": "",
+		"host": "127.0.0.1",
+		"dialect": "postgres",
+		"timezone": "+02:00",
+		"dialectOptions": {
+			"ssl": {
+				"rejectUnauthorized": false
+			}
+		}
+	}
 }
