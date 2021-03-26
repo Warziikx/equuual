@@ -170,10 +170,17 @@ const groupController = {
 			let groupId = req.params.id;
 			let connecterCustomerId = req.session.customer_id;
 			if (groupId == null || connecterCustomerId == null) throw new WsException(40000);
-			let group = await groupDao.readOne({ where: { id: groupId } });
+			let group = await groupDao.readOne({ where: { id: groupId }, include: [{ model: models.option, as: "options", through: models.group_option }] });
 			if (group == null) throw new WsException(40402);
+
 			let data = {};
-			let spent = await spendServices.getSpendWithGroupId(groupId);
+			let spent = null;
+			if (groupServices.isGroupArchiveActivated(group)) {
+				let archiveObject = otherServices.getArchiveFromId(null);
+				spent = await spendServices.getSpendWithGroupIdAndDate(groupId, archiveObject.firstOfMonth, archiveObject.nextMonth);
+			} else {
+				spent = await spendServices.getSpendWithGroupId(groupId);
+			}
 			data.customerAmount = spent !== null ? spendServices.amountOfCustomer(spent, connecterCustomerId) : 0;
 			data.totalAmount = spent !== null ? spendServices.getTotalAmount(spent) : 0;
 			data.spends = spent;
