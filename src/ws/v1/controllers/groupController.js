@@ -8,6 +8,7 @@ const spendDao = require("../../../core/dao/spendDao");
 //SERVICES
 const spendServices = require("../../../core/services/spendServices");
 const groupServices = require("../../../core/services/groupServices");
+const otherServices = require("../../../core/services/otherServices");
 
 //UTILS
 const CoreException = require("../../../core/utils/coreException");
@@ -199,8 +200,6 @@ const groupController = {
 
 			let archiveObject = otherServices.getArchiveFromId(archiveId);
 			let spent = await spendServices.getSpendWithGroupIdAndDate(id, archiveObject.firstOfMonth, archiveObject.nextMonth);
-
-
 
 			//let spent = await spendServices.getSpendWithGroupId(groupId);
 			data.customerAmount = spent !== null ? spendServices.amountOfCustomer(spent, connecterCustomerId) : 0;
