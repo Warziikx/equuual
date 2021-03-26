@@ -199,7 +199,7 @@ const groupController = {
 			let data = {};
 
 			let archiveObject = otherServices.getArchiveFromId(archiveId);
-			let spent = await spendServices.getSpendWithGroupIdAndDate(id, archiveObject.firstOfMonth, archiveObject.nextMonth);
+			let spent = await spendServices.getSpendWithGroupIdAndDate(groupId, archiveObject.firstOfMonth, archiveObject.nextMonth);
 
 			//let spent = await spendServices.getSpendWithGroupId(groupId);
 			data.customerAmount = spent !== null ? spendServices.amountOfCustomer(spent, connecterCustomerId) : 0;
