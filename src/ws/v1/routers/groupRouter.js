@@ -22,6 +22,7 @@ router.get("/:id/debt", groupController.getDebts);
 
 //ARCHIVE
 router.get("/:id/archive", groupController.getArchives);
+router.get("/:id/archive/:archiveId", authMiddleware.isGroupMember(), groupController.getSpendsArchives);
 
 //OPTIONS
 router.get("/:id/option", groupController.getOptions);

@@ -187,6 +187,36 @@ const groupController = {
 			throw err;
 		}
 	},
+	getSpendsArchives: async function (req, res, next) {
+		try {
+			let groupId = req.params.id;
+			let archiveId = req.params.archiveId;
+			let connecterCustomerId = req.session.customer_id;
+			if (groupId == null || connecterCustomerId == null) throw new WsException(40000);
+			let group = await groupDao.readOne({ where: { id: groupId } });
+			if (group == null) throw new WsException(40402);
+			let data = {};
+
+			let archiveObject = otherServices.getArchiveFromId(archiveId);
+			let spent = await spendServices.getSpendWithGroupIdAndDate(id, archiveObject.firstOfMonth, archiveObject.nextMonth);
+
+
+
+			//let spent = await spendServices.getSpendWithGroupId(groupId);
+			data.customerAmount = spent !== null ? spendServices.amountOfCustomer(spent, connecterCustomerId) : 0;
+			data.totalAmount = spent !== null ? spendServices.getTotalAmount(spent) : 0;
+			data.spends = spent;
+			res.send(data);
+		} catch (err) {
+			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
+				logger.exception({ err: err, debugMsg: FILE_NAME + " - getSpends" });
+			}
+			res.status(err.status);
+			delete err.status;
+			res.send(err);
+			throw err;
+		}
+	},
 	getDebts: async function (req, res, next) {
 		try {
 			let groupId = req.params.id;
