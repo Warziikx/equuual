@@ -84,6 +84,22 @@ const friendController = {
 			res.send(err);
 		}
 	},
+	searchFriends: async function (req, res, next) {
+		try {
+			let valueToSearch = req.params.valueToSearch;
+			let customerId = req.session.customer_id;
+			if (valueToSearch == null) throw new WebException(40000);
+			let customers = await customerDao.read({ where: { login: { [models.Sequelize.Op.like]: `${valueToSearch}%` } } });
+			res.send(customers);
+		} catch (err) {
+			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
+				logger.exception({ err: err, debugMsg: FILE_NAME + "- deleteFriend" });
+			}
+			res.status(err.status);
+			delete err.status;
+			res.send(err);
+		}
+	},
 };
 
 module.exports = friendController;

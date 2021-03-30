@@ -5,6 +5,7 @@ const router = express.Router();
 const friendController = require("../controllers/friendController");
 
 router.get("/", friendController.getFriends);
+router.get("/search/:valueToSearch", friendController.searchFriends);
 router.post("/", friendController.requestFriend);
 router.delete("/:id", friendController.deleteFriend);
 
