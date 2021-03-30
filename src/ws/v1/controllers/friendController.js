@@ -89,7 +89,10 @@ const friendController = {
 			let valueToSearch = req.params.valueToSearch;
 			let customerId = req.session.customer_id;
 			if (valueToSearch == null) throw new WebException(40000);
-			let customers = await customerDao.read({ where: { login: { [models.Sequelize.Op.like]: `${valueToSearch}%` } } });
+			let customers = await customerDao.read({
+				where: { login: { [models.Sequelize.Op.like]: `${valueToSearch}%` } },
+				include: [{ model: models.customer_img, as: "customerImg" }],
+			});
 			if (customers == null) customers = [];
 			res.send(customers);
 		} catch (err) {
