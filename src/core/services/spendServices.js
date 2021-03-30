@@ -27,6 +27,7 @@ const spendServices = {
 					as: "category",
 				},
 			],
+			order: [["date", "DESC"]],
 		});
 		return spend;
 	},
@@ -175,7 +176,6 @@ const spendServices = {
 				return debt;
 			})
 		);
-		console.log("after");
 		return newDebt;
 	},
 	getArchiveList: function (payments) {
