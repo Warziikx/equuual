@@ -90,29 +90,9 @@ const friendController = {
 			let customerId = req.session.customer_id;
 			if (valueToSearch == null) throw new WebException(40000);
 			let customers = await customerDao.read({
-				where: {
-					login: { [models.Sequelize.Op.like]: `${valueToSearch}%` },
-					id: { [models.Sequelize.Op.not]: customerId },
-				},
-				include: [
-					{ model: models.customer_img, as: "customerImg" },
-					{ model: models.customer, as: "friends" },
-					{ model: models.customer, as: "userFriends" },
-				],
+				where: { login: { [models.Sequelize.Op.like]: `${valueToSearch}%` } },
+				include: [{ model: models.customer_img, as: "customerImg" }],
 			});
-			/* Filtre les personnes avec qui nous dommes déjà amie */
-			customers = customers.filter((customer) => {
-				let isAlreadyFriend = false;
-				customer.friends.map((friend) => {
-					if (friend.id == customerId) isAlreadyFriend = true;
-				});
-				if (isAlreadyFriend) return;
-				customer.userFriends.map((friend) => {
-					if (friend.id == customerId) isAlreadyFriend = true;
-				});
-				if (!isAlreadyFriend) return customer;
-			});
-
 			if (customers == null) customers = [];
 			res.send(customers);
 		} catch (err) {
