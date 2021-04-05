@@ -27,7 +27,7 @@ const authController = {
 			if (login == null || password == null || udid == null) throw new WsException(40000);
 			let newpass = blake.blake2bHex(CONSTANTE["START_SAL"] + password + CONSTANTE["END_SAL"]);
 			let customer = await customerDao.readOne({ where: { login: login, password: newpass } });
-			if (customer == null) throw new WsException(40401);
+			if (customer == null) throw new WsException(20401);
 			let device = await deviceDao.readOne({ where: { udid: udid } });
 			if (device) {
 				device = await deviceDao.update(device, { customer_id: customer.id });
@@ -241,7 +241,7 @@ const authController = {
 			let { email } = req.body;
 			if (email == null) throw new WsException(40000);
 			let customer = await customerDao.readOne({ where: { email: email } });
-			if (customer == null) throw new WsException(40401);
+			if (customer == null) throw new WsException(20401);
 			mailer.sendMail({ from: CONSTANTE.MAIL_USER, to: customer.email, subject: "Sending Email using Node.js", text: "That was easy!" });
 			res.send({ data: "ok" });
 		} catch (err) {
