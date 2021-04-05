@@ -27,8 +27,8 @@ const accountController = {
 			if (!(err instanceof WsException) && !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - getAccount" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
@@ -52,8 +52,8 @@ const accountController = {
 			if (!(err instanceof WsException) && !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - editAccount" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},

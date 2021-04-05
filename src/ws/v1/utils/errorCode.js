@@ -4,7 +4,6 @@ let ERROR_CODE = {
 		message: "L'utilisateur doit définir un login",
 		exception: "L'utilisateur doit définir un login",
 	},
-
 	40000: {
 		http: 400,
 		message: "Paramètres invalide",

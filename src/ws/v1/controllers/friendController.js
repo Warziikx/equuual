@@ -31,8 +31,8 @@ const friendController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + "- getFriends" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
@@ -57,8 +57,8 @@ const friendController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + "- requestFriend" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
@@ -79,8 +79,8 @@ const friendController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + "- deleteFriend" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
@@ -99,8 +99,8 @@ const friendController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + "- deleteFriend" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},

@@ -37,8 +37,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - editGroup" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -54,8 +54,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - createGroup" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -72,8 +72,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - editGroup" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -92,8 +92,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - editGroup" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -111,8 +111,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - deleteGroup" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -138,8 +138,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - listMembers" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -159,8 +159,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - inviteMember" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -189,8 +189,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - getSpends" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -217,8 +217,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - getSpends" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -240,8 +240,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - getDebts" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -260,8 +260,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - getArchives" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -280,8 +280,8 @@ const groupController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - getOptions" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}

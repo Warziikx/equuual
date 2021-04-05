@@ -54,8 +54,8 @@ const authController = {
 			if (!(err instanceof WsException) && !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - login" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
@@ -107,8 +107,8 @@ const authController = {
 			if (!(err instanceof WsException) && !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - loginFacebook" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
@@ -151,8 +151,8 @@ const authController = {
 			if (!(err instanceof WsException) && !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - loginFacebook" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
@@ -189,8 +189,8 @@ const authController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - register" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 			throw err;
 		}
@@ -218,8 +218,8 @@ const authController = {
 			if (!(err instanceof WsException) || !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + "- refresh" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
@@ -231,8 +231,8 @@ const authController = {
 			if (!(err instanceof WsException) && !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - getAllImages" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
@@ -248,8 +248,8 @@ const authController = {
 			if (!(err instanceof WsException) && !(err instanceof CoreException)) {
 				logger.exception({ err: err, debugMsg: FILE_NAME + " - getAllImages" });
 			}
-			res.status(err.status);
-			delete err.status;
+			//res.status(err.status);
+			//delete err.status;
 			res.send(err);
 		}
 	},
