@@ -20,6 +20,7 @@ const spendServices = {
 					model: models.customer,
 					as: "percent_divide",
 					through: models.spend_customer,
+					include: [{ model: models.customer_img, as: "customerImg" }],
 				},
 				{ model: models.customer, as: "payer" },
 				{
