@@ -140,7 +140,7 @@ block content
                                 span.text-sm.align-middle
                                     | #{participant.displayName}
                                 .flex.flex-row.space-x-2.justify-center.items-center
-                                    input.w-16.px-2.py-1.leading-5.rounded-full.appearance-none.nm-inset-gray-200.w-8(type="number" name="part" id=`part_${participant.id}` value=`${participant.spend_customer.nb_part}` onkeyup="updateAmount()")
+                                    input.w-16.bg-white.rounded.border.border-gray-300.text-base.outline-none.text-gray-700.py-1.px-3.leading-8.transition-colors.duration-200.ease-in-out(class='focus:border-eminence-500 focus:ring-2 focus:ring-eminence-200' type="number" name="part" id=`part_${participant.id}` value=`${participant.spend_customer.nb_part}` onkeyup="updateAmount()")
                                     span.align-middle(id=`cost_display_${participant.id}`) 0.00 €
                         each participant,index in leftGroupMembers
                             .mb-6.flex.items-center.justify-between
