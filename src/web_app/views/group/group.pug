@@ -70,7 +70,7 @@ block content
                         //-     span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Reporter
               #member.hidden.space-y-4.px-4(class="xl:block")
                 h3.leading-5.uppercase.tracking-widest.text-gray-600.font-semibold.text-sm Membres
-                if customer.userFriends.length > 0
+                if customer != null && customer.userFriends.length > 0
                   button.w-full.rounded-md.py-2.bg-white.shadow.uppercase.font-semibold.tracking-wide.transition.duration-200.ease-in-out(class='hover:shadow-lg' onclick="addMember()")
                     span.bg-gradient-to-r.from-eminence-400.to-night-shadz-500.bg-clip-text.text-transparent Ajouter un membre
                 .flex.flex-row.items-center.p-4
