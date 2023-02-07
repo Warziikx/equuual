@@ -21,19 +21,18 @@ const providersAuthRouter = require("./src/web_app/routers/providersAuthRouter")
 app.set("views", path.join(__dirname, "src/web_app/views"));
 app.set("view engine", "pug");
 
-if (process.env.NODE_ENV == "production") {
-	rtg = require("url").parse(process.env.REDIS_URL);
-	redis = require("redis").createClient(rtg.port, rtg.hostname);
-	redis.auth(rtg.auth.split(":")[1]);
-	app.use(
-		session({
-			store: new RedisStore({ client: redis }),
-			secret: "DYrN9VijHO",
-			resave: true,
-			saveUninitialized: false,
-		})
-	);
-} /*else {
+rtg = require("url").parse(process.env.REDIS_URL);
+redis = require("redis").createClient(rtg.port, rtg.hostname);
+redis.auth(rtg.auth.split(":")[1]);
+app.use(
+	session({
+		store: new RedisStore({ client: redis }),
+		secret: "DYrN9VijHO",
+		resave: true,
+		saveUninitialized: false,
+	})
+);
+ /*else {
 	app.use(
 		session({
 			key: "utilisateur_sid",
@@ -60,7 +59,7 @@ app.use(function (req, res, next) {
 
 app.use(passport.initialize());
 
-//Log
+//Log²
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
