@@ -22,7 +22,7 @@ app.set("views", path.join(__dirname, "src/web_app/views"));
 app.set("view engine", "pug");
 
 if (process.env.NODE_ENV == "production") {
-	rtg = require("url").parse(process.env.REDISTOGO_URL);
+	rtg = require("url").parse(process.env.REDIS_URL);
 	redis = require("redis").createClient(rtg.port, rtg.hostname);
 	redis.auth(rtg.auth.split(":")[1]);
 	app.use(
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV == "production") {
 			saveUninitialized: false,
 		})
 	);
-} else {
+} /*else {
 	app.use(
 		session({
 			key: "utilisateur_sid",
@@ -49,7 +49,7 @@ if (process.env.NODE_ENV == "production") {
 			}),
 		})
 	);
-}
+}*/
 
 //Ajoute de variable au locals
 app.use(function (req, res, next) {
